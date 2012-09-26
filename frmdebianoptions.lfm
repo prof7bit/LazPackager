@@ -11,7 +11,7 @@ object FDebianOptions: TFDebianOptions
   OnDestroy = FormDestroy
   Position = poScreenCenter
   LCLVersion = '1.0.1.4'
-  object Tab: TPageControl
+  object TabCtrl: TPageControl
     Left = 8
     Height = 422
     Top = 8
@@ -559,6 +559,7 @@ object FDebianOptions: TFDebianOptions
         Top = 119
         Width = 208
         Caption = 'Preview Makefile'
+        OnClick = BtnPreviewMakefileClick
         TabOrder = 3
       end
     end
@@ -1064,6 +1065,7 @@ object FDebianOptions: TFDebianOptions
         Top = 7
         Width = 208
         Caption = 'Reset template'
+        OnClick = BtnResetControlClick
         TabOrder = 1
       end
       object BtnPreviewControl: TButton
@@ -1072,6 +1074,7 @@ object FDebianOptions: TFDebianOptions
         Top = 39
         Width = 208
         Caption = 'Preview control file'
+        OnClick = BtnPreviewControlClick
         TabOrder = 2
       end
     end
@@ -1577,6 +1580,7 @@ object FDebianOptions: TFDebianOptions
         Top = 7
         Width = 208
         Caption = 'Reset template'
+        OnClick = BtnResetRulesClick
         TabOrder = 1
       end
       object BtnPreviewRules: TButton
@@ -1585,6 +1589,7 @@ object FDebianOptions: TFDebianOptions
         Top = 39
         Width = 208
         Caption = 'Preview rules file'
+        OnClick = BtnPreviewRulesClick
         TabOrder = 2
       end
     end
@@ -2090,6 +2095,7 @@ object FDebianOptions: TFDebianOptions
         Top = 7
         Width = 208
         Caption = 'Reset template'
+        OnClick = BtnResetChangelogClick
         TabOrder = 1
       end
       object BtnPreviewChangelog: TButton
@@ -2098,6 +2104,7 @@ object FDebianOptions: TFDebianOptions
         Top = 39
         Width = 208
         Caption = 'Preview changelog file'
+        OnClick = BtnPreviewChangelogClick
         TabOrder = 2
       end
     end
@@ -2603,6 +2610,7 @@ object FDebianOptions: TFDebianOptions
         Top = 7
         Width = 208
         Caption = 'Reset template'
+        OnClick = BtnResetCopyrightClick
         TabOrder = 1
       end
       object BtnPreviewCopyright: TButton
@@ -2611,6 +2619,7 @@ object FDebianOptions: TFDebianOptions
         Top = 39
         Width = 208
         Caption = 'Preview copyright file'
+        OnClick = BtnPreviewCopyrightClick
         TabOrder = 2
       end
     end

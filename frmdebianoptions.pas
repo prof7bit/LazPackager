@@ -30,17 +30,27 @@ type
     EdCopyright: TSynEdit;
     EdMakefile: TSynEdit;
     MakefileOptions: TRadioGroup;
-    Tab: TPageControl;
+    TabCtrl: TPageControl;
     PageOptions: TTabSheet;
     PageControl: TTabSheet;
     PageRules: TTabSheet;
     PageChangelog: TTabSheet;
     PageCopyright: TTabSheet;
     PageMakefile: TTabSheet;
+    procedure BtnPreviewMakefileClick(Sender: TObject);
+    procedure BtnPreviewControlClick(Sender: TObject);
+    procedure BtnPreviewRulesClick(Sender: TObject);
+    procedure BtnPreviewChangelogClick(Sender: TObject);
+    procedure BtnPreviewCopyrightClick(Sender: TObject);
+    procedure BtnResetMakefileClick(Sender: TObject);
+    procedure BtnResetControlClick(Sender: TObject);
+    procedure BtnResetRulesClick(Sender: TObject);
+    procedure BtnResetChangelogClick(Sender: TObject);
+    procedure BtnResetCopyrightClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure InitSynEdits;
+    procedure ShowPreview(Title, Txt: String);
     procedure BtnOKClick(Sender: TObject);
-    procedure BtnResetMakefileClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure MakefileOptionsSelectionChanged(Sender: TObject);
@@ -53,7 +63,8 @@ var
 
 implementation
 uses
-  lazdebianmain;
+  lazdebianmain,
+  lazdebianpreview;
 
 const
   IDX_MAKE_USE_EXISTING = 0;
@@ -71,6 +82,7 @@ end;
 
 procedure TFDebianOptions.FormCreate(Sender: TObject);
 begin
+  TabCtrl.ActivePage := PageOptions;
   InitSynEdits;
   Settings := TSettings.Create;
   EdMakefile.Text := Settings.Makefile;
@@ -136,9 +148,66 @@ begin
   InitSynEdit(EdCopyright);
 end;
 
+procedure TFDebianOptions.ShowPreview(Title, Txt: String);
+begin
+  FFilePreview := TFFilePreview.Create(Self);
+  FFilePreview.SetText(Title, Txt);
+  FFilePreview.ShowModal;
+end;
+
 procedure TFDebianOptions.FormDestroy(Sender: TObject);
 begin
   Settings.Free;
+end;
+
+procedure TFDebianOptions.BtnPreviewMakefileClick(Sender: TObject);
+begin
+  ShowPreview('Makefile', EdMakefile.Text);
+end;
+
+procedure TFDebianOptions.BtnPreviewControlClick(Sender: TObject);
+begin
+  ShowPreview('debian/control', EdControl.Text);
+end;
+
+procedure TFDebianOptions.BtnPreviewRulesClick(Sender: TObject);
+begin
+  ShowPreview('debian/rules', EdRules.Text);
+end;
+
+procedure TFDebianOptions.BtnPreviewChangelogClick(Sender: TObject);
+begin
+  ShowPreview('debian/changelog', EdChangelog.Text);
+end;
+
+procedure TFDebianOptions.BtnPreviewCopyrightClick(Sender: TObject);
+begin
+  ShowPreview('debian/copyright', EdCopyright.Text);
+end;
+
+procedure TFDebianOptions.BtnResetMakefileClick(Sender: TObject);
+begin
+  EdMakefile.Text := DEFAULT_MAKEFILE;
+end;
+
+procedure TFDebianOptions.BtnResetControlClick(Sender: TObject);
+begin
+  EdControl.Text := DEFAULT_CONTROL;
+end;
+
+procedure TFDebianOptions.BtnResetRulesClick(Sender: TObject);
+begin
+  EdRules.Text := DEFAULT_RULES;
+end;
+
+procedure TFDebianOptions.BtnResetChangelogClick(Sender: TObject);
+begin
+  EdChangelog.Text := DEFAULT_CHANGELOG;
+end;
+
+procedure TFDebianOptions.BtnResetCopyrightClick(Sender: TObject);
+begin
+  EdCopyright.Text := DEFAULT_COPYRIGHT;
 end;
 
 procedure TFDebianOptions.BtnOKClick(Sender: TObject);
@@ -149,11 +218,6 @@ begin
   Settings.Changelog := EdChangelog.Text;
   Settings.Copyright := EdCopyright.Text;
   Settings.Save;
-end;
-
-procedure TFDebianOptions.BtnResetMakefileClick(Sender: TObject);
-begin
-  EdMakefile.Text := DEFAULT_MAKEFILE;
 end;
 
 end.

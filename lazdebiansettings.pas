@@ -51,7 +51,7 @@ const
     + LF
     + ' -- ?AUTHOR <?EMAIL>  ?DATE' + LF;
 
-  COPYRIGHT_DEFAULT
+  DEFAULT_COPYRIGHT
     = 'Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/' + LF
     + LF
     + 'Files: *' + LF
@@ -108,7 +108,7 @@ begin
   Control := LoadProperty('lazdebian_control', DEFAULT_CONTROL);
   Rules := LoadProperty('lazdebian_rules', DEFAULT_RULES);
   Changelog := LoadProperty('lazdebian_changelog', DEFAULT_CHANGELOG);
-  Copyright := LoadProperty('lazdebian_copyright', COPYRIGHT_DEFAULT);
+  Copyright := LoadProperty('lazdebian_copyright', DEFAULT_COPYRIGHT);
 end;
 
 procedure TSettings.SaveProperty(Key, Value: String);
