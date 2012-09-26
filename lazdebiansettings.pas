@@ -5,27 +5,59 @@ unit lazdebiansettings;
 interface
 
 const
-  DEFAULT_MAKEFILE =
-    '.PHONY : all'#10 +
-    'all:'#10 +
-    #9'lazbuild ?PROJECT'#10 +
-    #10 +
-    '.PHONY : clean'#10 +
-    'clean:'#10 +
-    #9'$(RM) -r lib'#10 +
-    #9'$(RM) *.res'#10 +
-    #9'$(RM) ?EXECUTABLE'#10 +
-    #10 +
-    '.PHONY : install'#10 +
-    'install:'#10 +
-    #9'mkdir -p $(DESTDIR)($PREFIX)/bin'#10 +
-    #9'install ?EXECUTABLE $(DESTDIR)($PREFIX)/bin/'#10 +
-    #10;
+  TAB = #9;
+  LF = #10;
 
-  DEFAULT_CONTROL = '';
-  DEFAULT_RULES = '';
-  DEFAULT_CHANGELOG = '';
-  COPYRIGHT_DEFAULT = '';
+  DEFAULT_MAKEFILE
+    = '.PHONY : all'+ LF
+    + 'all:'+ LF
+    + TAB + 'lazbuild ?PROJECT'+ LF
+    + LF
+    + '.PHONY : clean'+ LF
+    + 'clean:'+ LF
+    + TAB + '$(RM) -r lib'+ LF
+    + TAB + '$(RM) *.res'+ LF
+    + TAB + '$(RM) ?EXECUTABLE'+ LF
+    + LF
+    + '.PHONY : install'+ LF
+    + 'install:'+ LF
+    + TAB + 'mkdir -p $(DESTDIR)($PREFIX)/bin'+ LF
+    + TAB + 'install ?EXECUTABLE $(DESTDIR)($PREFIX)/bin/'+ LF;
+
+  DEFAULT_CONTROL
+    = 'Source: ?PACKAGE_NAME'+ LF
+    + 'Maintainer: ?AUTHOR <?EMAIL>'+ LF
+    + 'Section: misc'+ LF
+    + 'Priority: optional'+ LF
+    + 'Standards-Version: 3.9.3'+ LF
+    + 'Build-Depends: fpc, lcl, lcl-utils, lazarus, debhelper (>= 8)'+ LF
+    + LF
+    + 'Package: ?PACKAGE_NAME'+ LF
+    + 'Architecture: any'+ LF
+    + 'Depends: ${shlibs:Depends}, ${misc:Depends},'+ LF
+    + 'Description: ?DESCRIPTION'+ LF
+    + ' ?DESCRIPTION_LONG'+ LF;
+
+  DEFAULT_RULES
+    = '#!/usr/bin/make -f' + LF
+    + LF
+    + '%:' + LF
+	  + TAB + 'dh $@' + LF;
+
+  DEFAULT_CHANGELOG
+    = '?PACKAGE_NAME (?FULLVERSION) ?SERIES; urgency=low' + LF
+    + LF
+    + '  * Upstream release.' + LF
+    + LF
+    + ' -- ?AUTHOR <?EMAIL>  ?DATE' + LF;
+
+  COPYRIGHT_DEFAULT
+    = 'Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/' + LF
+    + LF
+    + 'Files: *' + LF
+    + 'Copyright: ?COPYRIGHT' + LF
+    + 'License: ?LICENSE' + LF
+    + ' ?LICENSE_DETAIL' + LF;
 
 type
   { TSettings }

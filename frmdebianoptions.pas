@@ -15,7 +15,19 @@ type
   TFDebianOptions = class(TForm)
     BtnOK: TButton;
     BtnPreviewMakefile: TButton;
+    BtnPreviewControl: TButton;
+    BtnPreviewRules: TButton;
+    BtnPreviewChangelog: TButton;
+    BtnPreviewCopyright: TButton;
+    BtnResetControl: TButton;
+    BtnResetRules: TButton;
+    BtnResetChangelog: TButton;
+    BtnResetCopyright: TButton;
     BtnResetMakefile: TButton;
+    EdControl: TSynEdit;
+    EdRules: TSynEdit;
+    EdChangelog: TSynEdit;
+    EdCopyright: TSynEdit;
     EdMakefile: TSynEdit;
     MakefileOptions: TRadioGroup;
     Tab: TPageControl;
@@ -62,6 +74,10 @@ begin
   InitSynEdits;
   Settings := TSettings.Create;
   EdMakefile.Text := Settings.Makefile;
+  EdControl.Text := Settings.Control;
+  EdRules.Text := Settings.Rules;
+  EdChangelog.Text := Settings.Changelog;
+  EdCopyright.Text := Settings.Copyright;
   MakefileOptionsSelectionChanged(nil);
 end;
 
@@ -114,6 +130,10 @@ begin
   B.AutoIndent := True;
   B.IndentType := sbitCopySpaceTab;
   InitSynEdit(EdMakefile);
+  InitSynEdit(EdControl);
+  InitSynEdit(EdRules);
+  InitSynEdit(EdChangelog);
+  InitSynEdit(EdCopyright);
 end;
 
 procedure TFDebianOptions.FormDestroy(Sender: TObject);
@@ -124,6 +144,10 @@ end;
 procedure TFDebianOptions.BtnOKClick(Sender: TObject);
 begin
   Settings.Makefile := EdMakefile.Text;
+  Settings.Control := EdControl.Text;
+  Settings.Rules := EdRules.Text;
+  Settings.Changelog := EdChangelog.Text;
+  Settings.Copyright := EdCopyright.Text;
   Settings.Save;
 end;
 
