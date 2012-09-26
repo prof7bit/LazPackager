@@ -61,6 +61,7 @@ procedure TFDebianOptions.FormCreate(Sender: TObject);
 begin
   InitSynEdits;
   Settings := TSettings.Create;
+  EdMakefile.Text := Settings.Makefile;
   MakefileOptionsSelectionChanged(nil);
 end;
 
@@ -128,7 +129,7 @@ end;
 
 procedure TFDebianOptions.BtnResetMakefileClick(Sender: TObject);
 begin
-  EdMakefile.Text := MAKEFILE_DEFAULT;
+  EdMakefile.Text := DEFAULT_MAKEFILE;
 end;
 
 end.
