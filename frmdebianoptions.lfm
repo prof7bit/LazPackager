@@ -1,13 +1,14 @@
 object FDebianOptions: TFDebianOptions
-  Left = 255
+  Left = 141
   Height = 423
-  Top = 156
+  Top = 181
   Width = 710
   Caption = 'Debian package creation options'
   ClientHeight = 423
   ClientWidth = 710
   OnClose = FormClose
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   Position = poScreenCenter
   LCLVersion = '1.0.1.4'
   object Tab: TPageControl

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, SynEdit, SynBeautifier, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, StdCtrls, ExtCtrls;
+  ComCtrls, StdCtrls, ExtCtrls, lazdebiansettings;
 
 type
 
@@ -25,6 +25,7 @@ type
     PageChangelog: TTabSheet;
     PageCopyright: TTabSheet;
     PageMakefile: TTabSheet;
+    procedure FormDestroy(Sender: TObject);
     procedure InitSynEdits;
     procedure BtnOKClick(Sender: TObject);
     procedure BtnResetMakefileClick(Sender: TObject);
@@ -32,9 +33,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure MakefileOptionsSelectionChanged(Sender: TObject);
   private
-    { private declarations }
-  public
-    { public declarations }
+    Settings: TSettings;
   end;
 
 var
@@ -61,6 +60,7 @@ end;
 procedure TFDebianOptions.FormCreate(Sender: TObject);
 begin
   InitSynEdits;
+  Settings := TSettings.Create;
   MakefileOptionsSelectionChanged(nil);
 end;
 
@@ -115,9 +115,15 @@ begin
   InitSynEdit(EdMakefile);
 end;
 
+procedure TFDebianOptions.FormDestroy(Sender: TObject);
+begin
+  Settings.Free;
+end;
+
 procedure TFDebianOptions.BtnOKClick(Sender: TObject);
 begin
-  //
+  Settings.Makefile := EdMakefile.Text;
+  Settings.Save;
 end;
 
 procedure TFDebianOptions.BtnResetMakefileClick(Sender: TObject);
