@@ -42,7 +42,7 @@ var
 
 implementation
 uses
-  lazdebianMakefile;
+  lazdebianmain;
 
 const
   IDX_MAKE_USE_EXISTING = 0;
@@ -105,6 +105,7 @@ var
     S.BlockIndent := 0;
     S.BlockTabIndent := 1;
     S.Beautifier := B;
+    S.Font.Quality := fqCleartype;
   end;
 
 begin
@@ -121,7 +122,7 @@ end;
 
 procedure TFDebianOptions.BtnResetMakefileClick(Sender: TObject);
 begin
-  EdMakefile.Text := GetMakefileDefaultTemplate;
+  EdMakefile.Text := MAKEFILE_DEFAULT;
 end;
 
 end.
