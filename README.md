@@ -16,7 +16,7 @@ building and packaging on their build farm.
 How does it work?
 -----------------
 When you invoke lazdebian it will make a copy of the source tree, create
-the necessary control file, rules and other meta with information from
+the necessary control file, rules and other meta data with information from
 your project settings on the fly using (configurable) templates and then
 invoke the debuild tool to create either a binary or a source package,
 optionally sign it with debsign (using your gpg key) and optionally upload
