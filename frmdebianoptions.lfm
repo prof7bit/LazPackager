@@ -22,6 +22,40 @@ object FDebianOptions: TFDebianOptions
     TabOrder = 0
     object PageOptions: TTabSheet
       Caption = 'Options'
+      ClientHeight = 396
+      ClientWidth = 876
+      object txtAuthor: TEdit
+        Left = 79
+        Height = 26
+        Top = 31
+        Width = 254
+        TabOrder = 0
+        Text = 'txtAuthor'
+      end
+      object txtEmail: TEdit
+        Left = 79
+        Height = 26
+        Top = 68
+        Width = 254
+        TabOrder = 1
+        Text = 'txtEmail'
+      end
+      object lblAuthor: TLabel
+        Left = 23
+        Height = 17
+        Top = 35
+        Width = 42
+        Caption = 'Author'
+        ParentColor = False
+      end
+      object lblEmail: TLabel
+        Left = 23
+        Height = 17
+        Top = 72
+        Width = 34
+        Caption = 'Email'
+        ParentColor = False
+      end
     end
     object PageMakefile: TTabSheet
       Caption = 'Makefile'

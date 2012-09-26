@@ -18,7 +18,7 @@
     <Description Value="Build a binary Debian (.deb) package from the current project or create a Debian source package and sign and upload to a Launchpad PPA automatically."/>
     <License Value="LGPL-2.0 with  static linking exception"/>
     <Version Major="1"/>
-    <Files Count="4">
+    <Files Count="5">
       <Item1>
         <Filename Value="frmdebianoptions.pas"/>
         <UnitName Value="frmDebianOptions"/>
@@ -36,6 +36,10 @@
         <Filename Value="lazdebianpreview.pas"/>
         <UnitName Value="lazdebianpreview"/>
       </Item4>
+      <Item5>
+        <Filename Value="lazdebianprocess.pas"/>
+        <UnitName Value="lazdebianprocess"/>
+      </Item5>
     </Files>
     <Type Value="DesignTime"/>
     <RequiredPkgs Count="4">

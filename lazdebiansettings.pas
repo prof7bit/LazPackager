@@ -63,6 +63,8 @@ type
   { TSettings }
 
   TSettings = class
+    Author: String;
+    Email: String;
     Makefile: String;
     Control: String;
     Rules: String;
@@ -74,11 +76,13 @@ type
     procedure Load;
     procedure SaveProperty(Key, Value: String);
     function LoadProperty(Key, DefaultValue: String): String;
+    function FillTemplate(Template: String): String;
   end;
 
 
 implementation
 uses
+  sysutils,
   LazIDEIntf;
 
 { TSettings }
@@ -95,20 +99,26 @@ end;
 
 procedure TSettings.Save;
 begin
-  SaveProperty('lazdebian_makefile', Makefile);
-  SaveProperty('lazdebian_control', Control);
-  SaveProperty('lazdebian_rules', Rules);
-  SaveProperty('lazdebian_changelog', Changelog);
-  SaveProperty('lazdebian_copyright', Copyright);
+  SaveProperty('lazdebian_author', Author);
+  SaveProperty('lazdebian_email', Email);
+
+  SaveProperty('lazdebian_tpl_makefile', Makefile);
+  SaveProperty('lazdebian_tpl_control', Control);
+  SaveProperty('lazdebian_tpl_rules', Rules);
+  SaveProperty('lazdebian_tpl_changelog', Changelog);
+  SaveProperty('lazdebian_tpl_copyright', Copyright);
 end;
 
 procedure TSettings.Load;
 begin
-  Makefile := LoadProperty('lazdebian_makefile', DEFAULT_MAKEFILE);
-  Control := LoadProperty('lazdebian_control', DEFAULT_CONTROL);
-  Rules := LoadProperty('lazdebian_rules', DEFAULT_RULES);
-  Changelog := LoadProperty('lazdebian_changelog', DEFAULT_CHANGELOG);
-  Copyright := LoadProperty('lazdebian_copyright', DEFAULT_COPYRIGHT);
+  Author := LoadProperty('lazdebian_author', 'Jane Doe');
+  Email := LoadProperty('lazdebian_email', 'jdoe@example.invalid');
+
+  Makefile := LoadProperty('lazdebian_tpl_makefile', DEFAULT_MAKEFILE);
+  Control := LoadProperty('lazdebian_tpl_control', DEFAULT_CONTROL);
+  Rules := LoadProperty('lazdebian_tpl_rules', DEFAULT_RULES);
+  Changelog := LoadProperty('lazdebian_tpl_changelog', DEFAULT_CHANGELOG);
+  Copyright := LoadProperty('lazdebian_tpl_copyright', DEFAULT_COPYRIGHT);
 end;
 
 procedure TSettings.SaveProperty(Key, Value: String);
@@ -124,7 +134,15 @@ begin
     Result := DefaultValue;
     SaveProperty(Key, Result);
   end;
+end;
 
+function TSettings.FillTemplate(Template: String): String;
+begin
+  Result := StringReplace(
+            StringReplace(
+            Template,
+            '?AUTHOR',      Author,     [rfReplaceAll]),
+            '?EMAIL',       Email,      [rfReplaceAll]);
 end;
 
 end.

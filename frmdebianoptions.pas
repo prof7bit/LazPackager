@@ -29,6 +29,8 @@ type
     EdChangelog: TSynEdit;
     EdCopyright: TSynEdit;
     EdMakefile: TSynEdit;
+    lblAuthor: TLabel;
+    lblEmail: TLabel;
     MakefileOptions: TRadioGroup;
     TabCtrl: TPageControl;
     PageOptions: TTabSheet;
@@ -37,6 +39,8 @@ type
     PageChangelog: TTabSheet;
     PageCopyright: TTabSheet;
     PageMakefile: TTabSheet;
+    txtAuthor: TEdit;
+    txtEmail: TEdit;
     procedure BtnPreviewMakefileClick(Sender: TObject);
     procedure BtnPreviewControlClick(Sender: TObject);
     procedure BtnPreviewRulesClick(Sender: TObject);
@@ -49,7 +53,8 @@ type
     procedure BtnResetCopyrightClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure InitSynEdits;
-    procedure ShowPreview(Title, Txt: String);
+    procedure UpdateSettings(SaveToProject: Boolean);
+    procedure ShowPreview(Title, Template: String);
     procedure BtnOKClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -85,6 +90,8 @@ begin
   TabCtrl.ActivePage := PageOptions;
   InitSynEdits;
   Settings := TSettings.Create;
+  txtAuthor.Text := Settings.Author;
+  txtEmail.Text := Settings.Email;
   EdMakefile.Text := Settings.Makefile;
   EdControl.Text := Settings.Control;
   EdRules.Text := Settings.Rules;
@@ -148,10 +155,25 @@ begin
   InitSynEdit(EdCopyright);
 end;
 
-procedure TFDebianOptions.ShowPreview(Title, Txt: String);
+procedure TFDebianOptions.UpdateSettings(SaveToProject: Boolean);
 begin
+  Settings.Author := txtAuthor.Text;
+  Settings.Email := txtEmail.Text;
+
+  Settings.Makefile := EdMakefile.Text;
+  Settings.Control := EdControl.Text;
+  Settings.Rules := EdRules.Text;
+  Settings.Changelog := EdChangelog.Text;
+  Settings.Copyright := EdCopyright.Text;
+  if SaveToProject then
+    Settings.Save;
+end;
+
+procedure TFDebianOptions.ShowPreview(Title, Template: String);
+begin
+  UpdateSettings(False);
   FFilePreview := TFFilePreview.Create(Self);
-  FFilePreview.SetText(Title, Txt);
+  FFilePreview.SetText(Title, Settings.FillTemplate(Template));
   FFilePreview.ShowModal;
 end;
 
@@ -212,12 +234,7 @@ end;
 
 procedure TFDebianOptions.BtnOKClick(Sender: TObject);
 begin
-  Settings.Makefile := EdMakefile.Text;
-  Settings.Control := EdControl.Text;
-  Settings.Rules := EdRules.Text;
-  Settings.Changelog := EdChangelog.Text;
-  Settings.Copyright := EdCopyright.Text;
-  Settings.Save;
+  UpdateSettings(True);
 end;
 
 end.
