@@ -102,8 +102,10 @@ implementation
 uses
   sysutils,
   process,
+  FileUtil,
   LazIDEIntf,
   W32VersionInfo,
+  CompilerOptions,
   ProjectResourcesIntf;
 
 
@@ -200,13 +202,19 @@ begin
 end;
 
 function TSettings.GetExecutableName: String;
+var
+  Opt: TBaseCompilerOptions;
+  Path: String;
 begin
-
+  Opt := LazarusIDE.ActiveProject.LazCompilerOptions as TBaseCompilerOptions;
+  Result := Opt.CreateTargetFilename(LazarusIDE.ActiveProject.MainFile.Filename);
+  Path := ExtractFilePath(LazarusIDE.ActiveProject.ProjectInfoFile);
+  Result := CreateRelativePath(Result, Path);
 end;
 
 function TSettings.GetProjectFileName: String;
 begin
-
+  Result := ExtractFileName(LazarusIDE.ActiveProject.ProjectInfoFile);
 end;
 
 function TSettings.LoadValue(Key, DefaultValue: String): String;
