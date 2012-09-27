@@ -1,11 +1,11 @@
 object FFilePreview: TFFilePreview
-  Left = 260
-  Height = 435
+  Left = 155
+  Height = 443
   Top = 182
-  Width = 612
+  Width = 717
   Caption = 'Preview of generated file'
-  ClientHeight = 435
-  ClientWidth = 612
+  ClientHeight = 443
+  ClientWidth = 717
   OnClose = FormClose
   Position = poScreenCenter
   LCLVersion = '1.0.1.4'
@@ -17,9 +17,9 @@ object FFilePreview: TFFilePreview
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 435
+    Height = 443
     Top = 0
-    Width = 612
+    Width = 717
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.Height = -13
     Font.Name = 'Courier New'

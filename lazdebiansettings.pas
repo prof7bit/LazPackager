@@ -90,6 +90,7 @@ type
     procedure Load;
     procedure SaveValue(Key, Value: String);
     function GetVersion: String;
+    function GetDateFormatted: String;
     function LoadValue(Key, DefaultValue: String): String;
     function FillTemplate(Template: String): String;
   end;
@@ -98,6 +99,7 @@ type
 implementation
 uses
   sysutils,
+  process,
   LazIDEIntf,
   W32VersionInfo,
   ProjectResourcesIntf;
@@ -172,6 +174,29 @@ begin
                                     ResVer.BuildNr]);
 end;
 
+function TSettings.GetDateFormatted: String;
+var
+  P: TProcess;
+  N: Integer;
+begin
+  P := TProcess.Create(nil);
+  P.Executable := 'date';
+  P.Parameters.Add('-R');
+  P.Options := [poUsePipes, poWaitOnExit];
+  try
+    P.Execute;
+    SetLength(Result, 31);
+    // needs to look like this; "Thu, 27 Sep 2012 19:19:14 +0200"
+    // exactly 31 characters long, no more, no less.
+    N := P.Output.Read(Result[1], 31);
+    if N < 31 then
+      Result := '### date -R gave wrong data ###';
+  except
+    Result := '#### error calling date -R ####';
+  end;
+  P.Free;
+end;
+
 function TSettings.LoadValue(Key, DefaultValue: String): String;
 begin
   Result := LazarusIDE.ActiveProject.CustomData.Values[Key];
@@ -184,7 +209,7 @@ end;
 function TSettings.FillTemplate(Template: String): String;
 var
   Version: String;
-  FullVerion: String;
+  FullVersion: String;
   Date: String;
   Executable: String;
   Project: String;
@@ -202,6 +227,9 @@ var
 
 begin
   Version := GetVersion;
+  FullVersion := Version + '-1';
+  Date := GetDateFormatted;
+
   Replace(['?COPYRIGHT?',         AuthorCopyright
           ,'?DESCRIPTION?',       Description
           ,'?DESCRIPTION_LONG?',  DescriptionLong
@@ -210,7 +238,7 @@ begin
           ,'?SERIES?',            Series
           ,'?PACKAGE_NAME?',      PackageName
           ,'?VERSION?',           Version
-          ,'?FULLVERSION?',       FullVerion
+          ,'?FULLVERSION?',       FullVersion
           ,'?DATE?',              Date
           ,'?EXECUTABLE?',        Executable
           ,'?PROJECT?',           Project
