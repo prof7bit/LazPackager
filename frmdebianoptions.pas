@@ -29,8 +29,20 @@ type
     EdChangelog: TSynEdit;
     EdCopyright: TSynEdit;
     EdMakefile: TSynEdit;
-    lblAuthor: TLabel;
-    lblEmail: TLabel;
+    GrpAuthor: TGroupBox;
+    GrpMaintainer: TGroupBox;
+    lblCopyright: TLabel;
+    lblExportCommands: TLabel;
+    lblLicense: TLabel;
+    lblLicense2: TLabel;
+    lblMore: TLabel;
+    lblPackageName: TLabel;
+    lblMaintainer: TLabel;
+    lblMaintainerEmail: TLabel;
+    lblPPA: TLabel;
+    lblSeries: TLabel;
+    lblVersion: TLabel;
+    lblVersionExplain: TLabel;
     MakefileOptions: TRadioGroup;
     TabCtrl: TPageControl;
     PageOptions: TTabSheet;
@@ -39,8 +51,16 @@ type
     PageChangelog: TTabSheet;
     PageCopyright: TTabSheet;
     PageMakefile: TTabSheet;
-    txtAuthor: TEdit;
-    txtEmail: TEdit;
+    txtCopyright: TEdit;
+    txtExportCommands: TMemo;
+    txtLicense: TEdit;
+    txtLicenseLong: TMemo;
+    txtPackageName: TEdit;
+    txtMaintainerEmail: TEdit;
+    txtMaintainerName: TEdit;
+    txtPPA: TEdit;
+    txtSeries: TEdit;
+    txtVersion: TEdit;
     procedure BtnPreviewMakefileClick(Sender: TObject);
     procedure BtnPreviewControlClick(Sender: TObject);
     procedure BtnPreviewRulesClick(Sender: TObject);
@@ -90,14 +110,25 @@ begin
   TabCtrl.ActivePage := PageOptions;
   InitSynEdits;
   Settings := TSettings.Create;
-  txtAuthor.Text := Settings.Author;
-  txtEmail.Text := Settings.Email;
-  EdMakefile.Text := Settings.Makefile;
-  EdControl.Text := Settings.Control;
-  EdRules.Text := Settings.Rules;
-  EdChangelog.Text := Settings.Changelog;
-  EdCopyright.Text := Settings.Copyright;
-  MakefileOptionsSelectionChanged(nil);
+  with Settings do begin
+    txtCopyright.Text := AuthorCopyright;
+    txtLicense.Text := License;
+    txtLicenseLong.Text := LicenseLong;
+    txtMaintainerName.Text := Maintainer;
+    txtMaintainerEmail.Text := MaintainerEmail;
+    txtSeries.Text := Series;
+    txtPackageName.Text := PackageName;
+    txtExportCommands.Text := ExportCommands;
+    txtPPA.Text := PPA;
+
+    EdMakefile.Text := Makefile;
+    EdControl.Text := Control;
+    EdRules.Text := Rules;
+    EdChangelog.Text := Changelog;
+    EdCopyright.Text := Copyright;
+    MakefileOptionsSelectionChanged(nil);
+  end;
+
 end;
 
 procedure TFDebianOptions.MakefileOptionsSelectionChanged(Sender: TObject);
@@ -157,16 +188,36 @@ end;
 
 procedure TFDebianOptions.UpdateSettings(SaveToProject: Boolean);
 begin
-  Settings.Author := txtAuthor.Text;
-  Settings.Email := txtEmail.Text;
+  //txtCopyright.Text := AuthorCopyright;
+  //txtLicense.Text := License;
+  //txtLicenseLong.Text := LicenseLong;
+  //txtMaintainerName.Text := Maintainer;
+  //txtMaintainerEmail.Text := MaintainerEmail;
+  //txtSeries.Text := Series;
+  //txtPackageName.Text := PackageName;
+  //txtExportCommands.Text := ExportCommands;
+  //txtPPA.Text := PPA;
 
-  Settings.Makefile := EdMakefile.Text;
-  Settings.Control := EdControl.Text;
-  Settings.Rules := EdRules.Text;
-  Settings.Changelog := EdChangelog.Text;
-  Settings.Copyright := EdCopyright.Text;
-  if SaveToProject then
-    Settings.Save;
+  with Settings do begin
+    AuthorCopyright := txtCopyright.Text;
+    License := txtLicense.Text;
+    LicenseLong := txtLicenseLong.Text;
+    Maintainer := txtMaintainerName.Text;
+    MaintainerEmail := txtMaintainerEmail.Text;
+    Series := txtSeries.Text;
+    PackageName := txtPackageName.Text;
+    ExportCommands := txtExportCommands.Text;
+    PPA := txtPPA.Text;
+
+    Makefile := EdMakefile.Text;
+    Control := EdControl.Text;
+    Rules := EdRules.Text;
+    Changelog := EdChangelog.Text;
+    Copyright := EdCopyright.Text;
+    if SaveToProject then
+      Save;
+  end;
+
 end;
 
 procedure TFDebianOptions.ShowPreview(Title, Template: String);
