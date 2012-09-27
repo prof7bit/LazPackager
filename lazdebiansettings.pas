@@ -91,6 +91,8 @@ type
     procedure SaveValue(Key, Value: String);
     function GetVersion: String;
     function GetDateFormatted: String;
+    function GetExecutableName: String;
+    function GetProjectFileName: String;
     function LoadValue(Key, DefaultValue: String): String;
     function FillTemplate(Template: String): String;
   end;
@@ -197,6 +199,16 @@ begin
   P.Free;
 end;
 
+function TSettings.GetExecutableName: String;
+begin
+
+end;
+
+function TSettings.GetProjectFileName: String;
+begin
+
+end;
+
 function TSettings.LoadValue(Key, DefaultValue: String): String;
 begin
   Result := LazarusIDE.ActiveProject.CustomData.Values[Key];
@@ -209,10 +221,6 @@ end;
 function TSettings.FillTemplate(Template: String): String;
 var
   Version: String;
-  FullVersion: String;
-  Date: String;
-  Executable: String;
-  Project: String;
   Tempfolder: String;
 
   procedure Replace(R: array of String);
@@ -227,8 +235,6 @@ var
 
 begin
   Version := GetVersion;
-  FullVersion := Version + '-1';
-  Date := GetDateFormatted;
 
   Replace(['?COPYRIGHT?',         AuthorCopyright
           ,'?DESCRIPTION?',       Description
@@ -238,10 +244,10 @@ begin
           ,'?SERIES?',            Series
           ,'?PACKAGE_NAME?',      PackageName
           ,'?VERSION?',           Version
-          ,'?FULLVERSION?',       FullVersion
-          ,'?DATE?',              Date
-          ,'?EXECUTABLE?',        Executable
-          ,'?PROJECT?',           Project
+          ,'?FULLVERSION?',       Version + '-1'
+          ,'?DATE?',              GetDateFormatted
+          ,'?EXECUTABLE?',        GetExecutableName
+          ,'?PROJECT?',           GetProjectFileName
           ,'?TEMPFOLDER?',        Tempfolder
           ]);
 
