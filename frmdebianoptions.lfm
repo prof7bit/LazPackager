@@ -1,131 +1,212 @@
 object FDebianOptions: TFDebianOptions
-  Left = 76
-  Height = 502
-  Top = 140
-  Width = 848
+  Left = 124
+  Height = 506
+  Top = 145
+  Width = 839
   Caption = 'Debian package creation options'
-  ClientHeight = 502
-  ClientWidth = 848
+  ClientHeight = 506
+  ClientWidth = 839
+  Constraints.MinHeight = 500
+  Constraints.MinWidth = 800
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnResize = FormResize
   Position = poScreenCenter
   LCLVersion = '1.0.1.4'
   object TabCtrl: TPageControl
-    Left = 8
-    Height = 451
-    Top = 8
-    Width = 831
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 466
+    Top = 0
+    Width = 839
     ActivePage = PageOptions
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Bottom = 40
     TabIndex = 0
     TabOrder = 0
     object PageOptions: TTabSheet
       Caption = 'Options'
-      ClientHeight = 425
-      ClientWidth = 829
+      ClientHeight = 440
+      ClientWidth = 837
       object GrpMaintainer: TGroupBox
-        Left = 415
-        Height = 408
-        Top = 7
-        Width = 404
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = PageOptions
+        AnchorSideRight.Control = PageOptions
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = PageOptions
+        AnchorSideBottom.Side = asrBottom
+        Left = 406
+        Height = 433
+        Top = 3
+        Width = 427
+        Anchors = [akTop, akRight, akBottom]
+        BorderSpacing.Top = 3
+        BorderSpacing.Right = 4
+        BorderSpacing.Bottom = 4
         Caption = 'Package Maintainer (you)'
-        ClientHeight = 390
-        ClientWidth = 400
+        ClientHeight = 415
+        ClientWidth = 423
         TabOrder = 0
         object txtMaintainerName: TEdit
-          Left = 126
+          AnchorSideLeft.Control = GrpMaintainer
+          AnchorSideRight.Control = GrpMaintainer
+          AnchorSideRight.Side = asrBottom
+          Left = 115
           Height = 26
           Top = 16
-          Width = 262
+          Width = 300
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 115
+          BorderSpacing.Right = 8
           TabOrder = 0
           Text = 'txtMaintainerName'
         end
         object txtMaintainerEmail: TEdit
-          Left = 126
+          AnchorSideLeft.Control = GrpMaintainer
+          AnchorSideRight.Control = GrpMaintainer
+          AnchorSideRight.Side = asrBottom
+          Left = 115
           Height = 26
           Top = 56
-          Width = 262
+          Width = 300
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 115
+          BorderSpacing.Right = 8
           TabOrder = 1
           Text = 'txtMaintainerEmail'
         end
         object txtPPA: TEdit
-          Left = 126
+          AnchorSideLeft.Control = GrpMaintainer
+          AnchorSideRight.Control = GrpMaintainer
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = GrpMaintainer
+          AnchorSideBottom.Side = asrBottom
+          Left = 115
           Height = 26
-          Top = 358
-          Width = 262
+          Top = 381
+          Width = 300
+          Anchors = [akLeft, akRight, akBottom]
+          BorderSpacing.Left = 115
+          BorderSpacing.Right = 8
+          BorderSpacing.Bottom = 8
           TabOrder = 2
           Text = 'txtPPA'
         end
         object lblMaintainer: TLabel
-          Left = 16
+          AnchorSideLeft.Control = GrpMaintainer
+          Left = 8
           Height = 17
           Top = 19
           Width = 100
+          BorderSpacing.Left = 8
           Caption = 'Maintainer Name'
           ParentColor = False
         end
         object lblMaintainerEmail: TLabel
-          Left = 18
+          AnchorSideLeft.Control = GrpMaintainer
+          Left = 8
           Height = 17
           Top = 61
           Width = 99
+          BorderSpacing.Left = 8
           Caption = 'Maintainer Email'
           ParentColor = False
         end
         object lblPPA: TLabel
-          Left = 16
+          AnchorSideLeft.Control = GrpMaintainer
+          AnchorSideBottom.Control = GrpMaintainer
+          AnchorSideBottom.Side = asrBottom
+          Left = 8
           Height = 17
-          Top = 360
+          Top = 386
           Width = 88
+          Anchors = [akLeft, akBottom]
+          BorderSpacing.Left = 8
+          BorderSpacing.Bottom = 12
           Caption = 'PPA (optional)'
           ParentColor = False
         end
         object txtSeries: TEdit
-          Left = 126
+          AnchorSideLeft.Control = GrpMaintainer
+          AnchorSideRight.Control = GrpMaintainer
+          AnchorSideRight.Side = asrBottom
+          Left = 115
           Height = 26
           Top = 96
-          Width = 262
+          Width = 300
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 115
+          BorderSpacing.Right = 8
           TabOrder = 3
           Text = 'txtSeries'
         end
         object lblSeries: TLabel
-          Left = 16
+          AnchorSideLeft.Control = GrpMaintainer
+          Left = 8
           Height = 17
           Top = 100
           Width = 36
+          BorderSpacing.Left = 8
           Caption = 'Series'
           ParentColor = False
         end
         object txtPackageName: TEdit
-          Left = 126
+          AnchorSideLeft.Control = GrpMaintainer
+          AnchorSideRight.Control = GrpMaintainer
+          AnchorSideRight.Side = asrBottom
+          Left = 115
           Height = 26
           Top = 136
-          Width = 262
+          Width = 300
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 115
+          BorderSpacing.Right = 8
           TabOrder = 4
           Text = 'txtPackageName'
         end
         object lblPackageName: TLabel
-          Left = 16
+          AnchorSideLeft.Control = GrpMaintainer
+          Left = 8
           Height = 17
           Top = 140
           Width = 87
+          BorderSpacing.Left = 8
           Caption = 'Package Name'
           ParentColor = False
         end
         object lblMore: TLabel
-          Left = 126
+          AnchorSideLeft.Control = GrpMaintainer
+          AnchorSideRight.Control = GrpMaintainer
+          AnchorSideRight.Side = asrBottom
+          Left = 115
           Height = 36
           Top = 172
-          Width = 249
+          Width = 300
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 115
+          BorderSpacing.Right = 8
           Caption = 'More adjustments can be made by editing '#10'the debian/* templates.'
           ParentColor = False
         end
         object txtExportCommands: TMemo
-          Left = 126
-          Height = 129
+          AnchorSideLeft.Control = GrpMaintainer
+          AnchorSideRight.Control = GrpMaintainer
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = txtPPA
+          Left = 115
+          Height = 152
           Top = 219
-          Width = 262
+          Width = 300
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          BorderSpacing.Left = 115
+          BorderSpacing.Right = 8
+          BorderSpacing.Bottom = 10
           Font.Height = -13
           Font.Name = 'Monospace'
           Font.Pitch = fpFixed
@@ -134,52 +215,88 @@ object FDebianOptions: TFDebianOptions
           TabOrder = 5
         end
         object lblExportCommands: TLabel
-          Left = 16
+          AnchorSideLeft.Control = GrpMaintainer
+          Left = 8
           Height = 55
           Top = 219
           Width = 83
+          BorderSpacing.Left = 8
           Caption = 'Commands to'#10'export all'#10'needed files'
           ParentColor = False
         end
       end
       object GrpAuthor: TGroupBox
-        Left = 15
-        Height = 408
-        Top = 7
-        Width = 392
+        AnchorSideLeft.Control = PageOptions
+        AnchorSideTop.Control = PageOptions
+        AnchorSideBottom.Control = PageOptions
+        AnchorSideBottom.Side = asrBottom
+        Left = 4
+        Height = 433
+        Top = 3
+        Width = 390
+        Anchors = [akTop, akLeft, akBottom]
+        BorderSpacing.Left = 4
+        BorderSpacing.Top = 3
+        BorderSpacing.Bottom = 4
         Caption = 'Software Author'
-        ClientHeight = 390
-        ClientWidth = 388
+        ClientHeight = 415
+        ClientWidth = 386
         TabOrder = 1
         object txtCopyright: TEdit
-          Left = 82
+          AnchorSideLeft.Control = GrpAuthor
+          AnchorSideRight.Control = GrpAuthor
+          AnchorSideRight.Side = asrBottom
+          Left = 80
           Height = 26
           Top = 16
-          Width = 294
+          Width = 298
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 80
+          BorderSpacing.Right = 8
           TabOrder = 0
           Text = 'txtCopyright'
         end
         object lblCopyright: TLabel
-          Left = 6
+          AnchorSideLeft.Control = GrpAuthor
+          Left = 8
           Height = 17
           Top = 19
           Width = 60
+          BorderSpacing.Left = 8
           Caption = 'Copyright'
           ParentColor = False
         end
         object txtDescription: TEdit
+          AnchorSideLeft.Control = GrpAuthor
+          AnchorSideRight.Control = GrpAuthor
+          AnchorSideRight.Side = asrBottom
           Left = 80
           Height = 26
           Top = 219
-          Width = 296
+          Width = 298
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 80
+          BorderSpacing.Right = 8
           TabOrder = 1
           Text = 'txtDescription'
         end
         object txtDescriptionLong: TMemo
-          Left = 82
-          Height = 124
-          Top = 260
-          Width = 294
+          AnchorSideLeft.Control = GrpAuthor
+          AnchorSideTop.Control = txtDescription
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = GrpAuthor
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = GrpAuthor
+          AnchorSideBottom.Side = asrBottom
+          Left = 80
+          Height = 152
+          Top = 255
+          Width = 298
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          BorderSpacing.Left = 80
+          BorderSpacing.Top = 10
+          BorderSpacing.Right = 8
+          BorderSpacing.Bottom = 8
           Lines.Strings = (
             'txtLicenseLong'
           )
@@ -188,52 +305,79 @@ object FDebianOptions: TFDebianOptions
           WordWrap = False
         end
         object lblDecription: TLabel
-          Left = 6
+          AnchorSideLeft.Control = GrpAuthor
+          Left = 8
           Height = 17
           Top = 224
           Width = 68
+          BorderSpacing.Left = 8
           Caption = 'Description'
           ParentColor = False
         end
         object lblDescriptionLong: TLabel
-          Left = 6
+          AnchorSideLeft.Control = GrpAuthor
+          AnchorSideTop.Control = txtDescription
+          AnchorSideTop.Side = asrBottom
+          Left = 8
           Height = 36
-          Top = 260
+          Top = 255
           Width = 68
+          BorderSpacing.Left = 8
+          BorderSpacing.Top = 10
           Caption = 'Description'#10'(long)'
           ParentColor = False
         end
         object lblVersion: TLabel
-          Left = 6
+          AnchorSideLeft.Control = GrpAuthor
+          Left = 8
           Height = 17
           Top = 61
           Width = 46
+          BorderSpacing.Left = 8
           Caption = 'Version'
           ParentColor = False
         end
         object txtVersion: TEdit
-          Left = 82
+          AnchorSideLeft.Control = GrpAuthor
+          AnchorSideRight.Control = GrpAuthor
+          AnchorSideRight.Side = asrBottom
+          Left = 80
           Height = 26
           Top = 56
-          Width = 294
+          Width = 298
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 80
+          BorderSpacing.Right = 8
           Color = clBackground
           ReadOnly = True
           TabOrder = 3
           Text = 'txtVersion'
         end
         object lblVersionExplain: TLabel
-          Left = 82
+          AnchorSideLeft.Control = GrpAuthor
+          AnchorSideRight.Control = GrpAuthor
+          AnchorSideRight.Side = asrBottom
+          Left = 80
           Height = 55
           Top = 88
-          Width = 282
+          Width = 298
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 80
+          BorderSpacing.Right = 8
           Caption = 'Version is taken from project settings. You must'#10'increment the build number after every upload'#10'or Launchpad will refuse to accept it.'
           ParentColor = False
         end
         object lblLicense: TLabel
-          Left = 82
+          AnchorSideLeft.Control = GrpAuthor
+          AnchorSideRight.Control = GrpAuthor
+          AnchorSideRight.Side = asrBottom
+          Left = 80
           Height = 17
           Top = 172
-          Width = 245
+          Width = 298
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 80
+          BorderSpacing.Right = 8
           Caption = 'Specifiy the license(s) in debian/copyright'
           ParentColor = False
         end
@@ -241,8 +385,8 @@ object FDebianOptions: TFDebianOptions
     end
     object PageMakefile: TTabSheet
       Caption = 'Makefile'
-      ClientHeight = 425
-      ClientWidth = 829
+      ClientHeight = 440
+      ClientWidth = 837
       object MakefileOptions: TRadioGroup
         Left = 7
         Height = 73
@@ -271,11 +415,17 @@ object FDebianOptions: TFDebianOptions
       inline EdMakefile: TSynEdit
         AnchorSideLeft.Control = MakefileOptions
         AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = PageMakefile
+        AnchorSideRight.Control = PageMakefile
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = PageMakefile
+        AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 415
-        Top = 7
-        Width = 595
+        Height = 424
+        Top = 10
+        Width = 603
         BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
         Anchors = [akTop, akLeft, akRight, akBottom]
         Font.Height = -13
         Font.Name = 'Courier New'
@@ -781,16 +931,22 @@ object FDebianOptions: TFDebianOptions
     end
     object PageControl: TTabSheet
       Caption = 'debian/control'
-      ClientHeight = 425
-      ClientWidth = 829
+      ClientHeight = 440
+      ClientWidth = 837
       inline EdControl: TSynEdit
         AnchorSideLeft.Control = BtnResetControl
         AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = PageControl
+        AnchorSideRight.Control = PageControl
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = PageControl
+        AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 415
-        Top = 7
-        Width = 595
+        Height = 424
+        Top = 10
+        Width = 603
         BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
         Anchors = [akTop, akLeft, akRight, akBottom]
         Font.Height = -13
         Font.Name = 'Courier New'
@@ -1296,16 +1452,22 @@ object FDebianOptions: TFDebianOptions
     end
     object PageRules: TTabSheet
       Caption = 'debian/rules'
-      ClientHeight = 425
-      ClientWidth = 829
+      ClientHeight = 440
+      ClientWidth = 837
       inline EdRules: TSynEdit
         AnchorSideLeft.Control = BtnResetRules
         AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = PageRules
+        AnchorSideRight.Control = PageRules
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = PageRules
+        AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 415
-        Top = 7
-        Width = 595
+        Height = 424
+        Top = 10
+        Width = 603
         BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
         Anchors = [akTop, akLeft, akRight, akBottom]
         Font.Height = -13
         Font.Name = 'Courier New'
@@ -1811,16 +1973,22 @@ object FDebianOptions: TFDebianOptions
     end
     object PageChangelog: TTabSheet
       Caption = 'debian/changelog'
-      ClientHeight = 425
-      ClientWidth = 829
+      ClientHeight = 440
+      ClientWidth = 837
       inline EdChangelog: TSynEdit
         AnchorSideLeft.Control = BtnResetChangelog
         AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = PageChangelog
+        AnchorSideRight.Control = PageChangelog
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = PageChangelog
+        AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 415
-        Top = 7
-        Width = 595
+        Height = 424
+        Top = 10
+        Width = 603
         BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
         Anchors = [akTop, akLeft, akRight, akBottom]
         Font.Height = -13
         Font.Name = 'Courier New'
@@ -2326,16 +2494,22 @@ object FDebianOptions: TFDebianOptions
     end
     object PageCopyright: TTabSheet
       Caption = 'debian/copyright'
-      ClientHeight = 425
-      ClientWidth = 829
+      ClientHeight = 440
+      ClientWidth = 837
       inline EdCopyright: TSynEdit
         AnchorSideLeft.Control = BtnResetCopyright
         AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = PageCopyright
+        AnchorSideRight.Control = PageCopyright
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = PageCopyright
+        AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 415
-        Top = 7
-        Width = 595
+        Height = 424
+        Top = 10
+        Width = 603
         BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
         Anchors = [akTop, akLeft, akRight, akBottom]
         Font.Height = -13
         Font.Name = 'Courier New'
@@ -2841,9 +3015,9 @@ object FDebianOptions: TFDebianOptions
     end
   end
   object BtnOK: TButton
-    Left = 764
+    Left = 755
     Height = 25
-    Top = 467
+    Top = 471
     Width = 75
     Anchors = [akRight, akBottom]
     Caption = 'Ok'

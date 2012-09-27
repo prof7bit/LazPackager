@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, SynEdit, SynBeautifier, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, StdCtrls, ExtCtrls, lazdebiansettings;
+  ComCtrls, StdCtrls, ExtCtrls, PairSplitter, lazdebiansettings;
 
 type
 
@@ -73,6 +73,7 @@ type
     procedure BtnResetChangelogClick(Sender: TObject);
     procedure BtnResetCopyrightClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure InitSynEdits;
     procedure UpdateSettings(SaveToProject: Boolean);
     procedure ShowPreview(Title, Template: String);
@@ -232,6 +233,15 @@ end;
 procedure TFDebianOptions.FormDestroy(Sender: TObject);
 begin
   Settings.Free;
+end;
+
+procedure TFDebianOptions.FormResize(Sender: TObject);
+var
+  HalfWidth: Integer;
+begin
+  HalfWidth := TabCtrl.Width div 2 - 8;
+  GrpAuthor.Width := HalfWidth;
+  GrpMaintainer.Width := HalfWidth;
 end;
 
 procedure TFDebianOptions.BtnPreviewMakefileClick(Sender: TObject);
