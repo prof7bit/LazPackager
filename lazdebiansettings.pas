@@ -71,8 +71,8 @@ type
 
   TSettings = class
     AuthorCopyright: String;
-    License: String;
-    LicenseLong: String;
+    Description: String;
+    DescriptionLong: String;
     Maintainer: String;
     MaintainerEmail: String;
     Series: String;
@@ -89,6 +89,7 @@ type
     procedure Save;
     procedure Load;
     procedure SaveValue(Key, Value: String);
+    function GetVersion: String;
     function LoadValue(Key, DefaultValue: String): String;
     function FillTemplate(Template: String): String;
   end;
@@ -97,7 +98,10 @@ type
 implementation
 uses
   sysutils,
-  LazIDEIntf;
+  LazIDEIntf,
+  W32VersionInfo,
+  ProjectResourcesIntf;
+
 
 { TSettings }
 
@@ -114,8 +118,8 @@ end;
 procedure TSettings.Save;
 begin
   SaveValue('lazdebian_copyright', AuthorCopyright);
-  SaveValue('lazdebian_license', License);
-  SaveValue('lazdebian_license_long', LicenseLong);
+  SaveValue('lazdebian_description', Description);
+  SaveValue('lazdebian_description_long', DescriptionLong);
   SaveValue('lazdebian_maintainer', Maintainer);
   SaveValue('lazdebian_maintainer_email', MaintainerEmail);
   SaveValue('lazdebian_series', Series);
@@ -133,8 +137,8 @@ end;
 procedure TSettings.Load;
 begin
   AuthorCopyright := LoadValue('lazdebian_copyright', '2012 Jane Doe');
-  License := LoadValue('lazdebian_license', 'GPL-2');
-  LicenseLong := LoadValue('lazdebian_license_long', '/usr/share/common-licenses/GPL-2');
+  Description := LoadValue('lazdebian_description', 'this is a program');
+  DescriptionLong := LoadValue('lazdebian_description_long', 'long description may not be empty!');
   Maintainer := LoadValue('lazdebian_maintainer', 'John Doe');
   MaintainerEmail := LoadValue('lazdebian_maintainer_email', 'john_doe@example.invalid');
   Series := LoadValue('lazdebian_series', 'precise');
@@ -155,6 +159,19 @@ begin
   LazarusIDE.ActiveProject.Modified := True;
 end;
 
+function TSettings.GetVersion: String;
+var
+  Res: TAbstractProjectResources;
+  ResVer: TProjectVersionInfo;
+begin
+  Res := LazarusIDE.ActiveProject.Resources as TAbstractProjectResources;
+  ResVer := Res.Resource[TProjectVersionInfo] as TProjectVersionInfo;
+  Result := Format('%d.%d.%d.%d',  [ResVer.MajorVersionNr,
+                                    ResVer.MinorVersionNr,
+                                    ResVer.RevisionNr,
+                                    ResVer.BuildNr]);
+end;
+
 function TSettings.LoadValue(Key, DefaultValue: String): String;
 begin
   Result := LazarusIDE.ActiveProject.CustomData.Values[Key];
@@ -165,25 +182,42 @@ begin
 end;
 
 function TSettings.FillTemplate(Template: String): String;
-begin
-  Result := StringReplace(StringReplace(StringReplace(StringReplace(
-            StringReplace(StringReplace(StringReplace(Template,
-            '?COPYRIGHT?',        AuthorCopyright,  [rfReplaceAll]),
-            '?LICENSE?',          License,          [rfReplaceAll]),
-            '?LICENSE_LONG?',     LicenseLong,      [rfReplaceAll]),
-            '?MAINTAINER?',       Maintainer,       [rfReplaceAll]),
-            '?MAINTAINER_EMAIL?', MaintainerEmail,  [rfReplaceAll]),
-            '?SERIES?',           Series,           [rfReplaceAll]),
-            '?PACKAGE_NAME?',     PackageName,      [rfReplaceAll]);
+var
+  Version: String;
+  FullVerion: String;
+  Date: String;
+  Executable: String;
+  Project: String;
+  Tempfolder: String;
 
-  // version
-  // fullversion
-  // date
-  // description
-  // description_long
-  // executable
-  // project
-  // tempfolder
+  procedure Replace(R: array of String);
+  var
+    I,J: Integer;
+  begin
+    for I := 0 to High(R) div 2 do begin
+      J := I shl 1;
+      Template := StringReplace(Template, R[J], R[J+1], [rfReplaceAll]);
+    end;
+  end;
+
+begin
+  Version := GetVersion;
+  Replace(['?COPYRIGHT?',         AuthorCopyright
+          ,'?DESCRIPTION?',       Description
+          ,'?DESCRIPTION_LONG?',  DescriptionLong
+          ,'?MAINTAINER?',        Maintainer
+          ,'?MAINTAINER_EMAIL?',  MaintainerEmail
+          ,'?SERIES?',            Series
+          ,'?PACKAGE_NAME?',      PackageName
+          ,'?VERSION?',           Version
+          ,'?FULLVERSION?',       FullVerion
+          ,'?DATE?',              Date
+          ,'?EXECUTABLE?',        Executable
+          ,'?PROJECT?',           Project
+          ,'?TEMPFOLDER?',        Tempfolder
+          ]);
+
+  Result := Template;
 end;
 
 end.

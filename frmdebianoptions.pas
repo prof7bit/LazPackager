@@ -33,8 +33,9 @@ type
     GrpMaintainer: TGroupBox;
     lblCopyright: TLabel;
     lblExportCommands: TLabel;
+    lblDecription: TLabel;
+    lblDescriptionLong: TLabel;
     lblLicense: TLabel;
-    lblLicense2: TLabel;
     lblMore: TLabel;
     lblPackageName: TLabel;
     lblMaintainer: TLabel;
@@ -53,8 +54,8 @@ type
     PageMakefile: TTabSheet;
     txtCopyright: TEdit;
     txtExportCommands: TMemo;
-    txtLicense: TEdit;
-    txtLicenseLong: TMemo;
+    txtDescription: TEdit;
+    txtDescriptionLong: TMemo;
     txtPackageName: TEdit;
     txtMaintainerEmail: TEdit;
     txtMaintainerName: TEdit;
@@ -112,8 +113,9 @@ begin
   Settings := TSettings.Create;
   with Settings do begin
     txtCopyright.Text := AuthorCopyright;
-    txtLicense.Text := License;
-    txtLicenseLong.Text := LicenseLong;
+    txtVersion.Text := GetVersion;
+    txtDescription.Text := Description;
+    txtDescriptionLong.Text := DescriptionLong;
     txtMaintainerName.Text := Maintainer;
     txtMaintainerEmail.Text := MaintainerEmail;
     txtSeries.Text := Series;
@@ -189,8 +191,8 @@ end;
 procedure TFDebianOptions.UpdateSettings(SaveToProject: Boolean);
 begin
   //txtCopyright.Text := AuthorCopyright;
-  //txtLicense.Text := License;
-  //txtLicenseLong.Text := LicenseLong;
+  //txtDescription.Text := License;
+  //txtDescriptionLong.Text := LicenseLong;
   //txtMaintainerName.Text := Maintainer;
   //txtMaintainerEmail.Text := MaintainerEmail;
   //txtSeries.Text := Series;
@@ -200,8 +202,8 @@ begin
 
   with Settings do begin
     AuthorCopyright := txtCopyright.Text;
-    License := txtLicense.Text;
-    LicenseLong := txtLicenseLong.Text;
+    Description := txtDescription.Text;
+    DescriptionLong := txtDescriptionLong.Text;
     Maintainer := txtMaintainerName.Text;
     MaintainerEmail := txtMaintainerEmail.Text;
     Series := txtSeries.Text;
