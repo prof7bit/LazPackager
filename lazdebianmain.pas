@@ -10,7 +10,8 @@ implementation
 uses
   Forms,
   MenuIntf,
-  frmDebianOptions;
+  frmDebianOptions,
+  frmdebianmakepackage;
 
 procedure OpenConfigDialog(Sender: TObject);
 begin
@@ -18,12 +19,27 @@ begin
   FDebianOptions.ShowModal;
 end;
 
+procedure MakeBinaryPackage(Sender: TObject);
+begin
+  FMakePackage := TFMakePackage.Create(Application.MainForm);
+  FMakePackage.SetType(debBinary);
+  FMakePackage.ShowModal;
+end;
+
+procedure MakeSourcePackage(Sender: TObject);
+begin
+  FMakePackage := TFMakePackage.Create(Application.MainForm);
+  FMakePackage.SetType(debSource);
+  FMakePackage.ShowModal;
+end;
+
+
 procedure Register;
 begin
   RegisterIDEMenuCommand(itmProjectWindowSection, 'debianopts','Debian Options ...', nil, @OpenConfigDialog);
   {$IFDEF LINUX}
-  RegisterIDEMenuCommand(itmProjectSaveSection, 'debianmakesource','Publish Debian Source Package ...', nil, @OpenConfigDialog);
-  RegisterIDEMenuCommand(itmRunBuilding, 'debianmakebin','Build Debian Binary Package ...', nil, @OpenConfigDialog);
+  RegisterIDEMenuCommand(itmProjectSaveSection, 'debianmakesource','Publish Debian Source Package ...', nil, @MakeSourcePackage);
+  RegisterIDEMenuCommand(itmRunBuilding, 'debianmakebin','Build Debian Binary Package ...', nil, @MakeBinaryPackage);
   {$ENDIF}
 end;
 
