@@ -9,12 +9,32 @@ uses
 procedure DoMakeBinaryPackage(Settings: TSettings; Sign: Boolean);
 procedure DoMakeSourcePackage(Settings: TSettings; Sign: Boolean; Upload: Boolean);
 
+var
+  IsBuildingPackage: Boolean = False;
+
 implementation
 uses
   Classes,
   SysUtils,
   Forms,
+  LCLType,
   process;
+
+type
+  TBuildProc = procedure(Setting: TSettings);
+
+  { TBuildThread }
+
+  TBuildThread = class(TThread)
+    FSettings: TSettings;
+    FBuildProc: TBuildProc;
+    constructor Create(BuildProc: TBuildProc; Settings: TSettings);
+    destructor Destroy; override;
+    procedure Execute; override;
+  end;
+
+var
+  BuildThread: TBuildThread = nil;
 
 procedure RunShellCommands(Directory: String; Commands: TStringList);
 var
@@ -128,18 +148,62 @@ begin
   Script.Free;
 end;
 
-procedure DoMakeBinaryPackage(Settings: TSettings; Sign: Boolean);
+procedure WorkerMakeBinary(Settings: TSettings);
 begin
   Prepare(Settings);
   DebuildBinary(Settings);
   Settings.Free;
 end;
 
-procedure DoMakeSourcePackage(Settings: TSettings; Sign: Boolean; Upload: Boolean);
+procedure WorkerMakeSource(Settings: TSettings);
 begin
   Prepare(Settings);
   DebuildSource(Settings);
   Settings.Free;
+end;
+
+procedure WarnStillRunning;
+begin
+  Application.MessageBox('LazDebian still running', 'LazDebian', MB_OK + MB_ICONWARNING);
+end;
+
+procedure DoMakeBinaryPackage(Settings: TSettings; Sign: Boolean);
+begin
+  if not IsBuildingPackage then
+    BuildThread := TBuildThread.Create(@WorkerMakeBinary, Settings)
+  else
+    WarnStillRunning;
+end;
+
+procedure DoMakeSourcePackage(Settings: TSettings; Sign: Boolean; Upload: Boolean);
+begin
+  if not IsBuildingPackage then
+    BuildThread := TBuildThread.Create(@WorkerMakeSource, Settings)
+  else
+    WarnStillRunning;
+end;
+
+{ TBuildThread }
+
+constructor TBuildThread.Create(BuildProc: TBuildProc; Settings: TSettings);
+begin
+  IsBuildingPackage := True;
+  FreeOnTerminate := True;
+  FBuildProc := BuildProc;
+  FSettings := Settings;
+  inherited Create(False)
+end;
+
+destructor TBuildThread.Destroy;
+begin
+  inherited Destroy;
+  IsBuildingPackage := False;
+  BuildThread := nil;
+end;
+
+procedure TBuildThread.Execute;
+begin
+  FBuildProc(FSettings);
 end;
 
 end.
