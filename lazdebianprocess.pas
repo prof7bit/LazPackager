@@ -77,6 +77,7 @@ begin
   Script.Append(Format('mv %s "%s"', [Settings.GetOrigFolderName, DEBUILD]));
   Script.Append(Format('mv %s "%s"', [Settings.GetOrigTarName, DEBUILD]));
   RunShellCommands(Settings.GetProjectDir, Script);
+  Script.Free;
 end;
 
 procedure CreateDebianFolder(Settings: TSettings);
@@ -89,7 +90,7 @@ begin
   Debian := ConcatPaths([Source, 'debian']);
   MkDir(Debian);
   CreateFile(ConcatPaths([Debian, 'compat']), '8');
-  CreateFile(ConcatPaths([Debian, 'control']), Settings.FillTemplate(Settings.Makefile));
+  CreateFile(ConcatPaths([Debian, 'control']), Settings.FillTemplate(Settings.Control));
   CreateFile(ConcatPaths([Debian, 'rules']), Settings.FillTemplate(Settings.Rules));
   CreateFile(ConcatPaths([Debian, 'changelog']), Settings.FillTemplate(Settings.Changelog));
   CreateFile(ConcatPaths([Debian, 'copyright']), Settings.FillTemplate(Settings.Copyright));
@@ -103,6 +104,18 @@ begin
   CreateDebianFolder(Settings);
 end;
 
+procedure DebuildSource(Settings: TSettings);
+var
+  SourceDir: String;
+  Script : TStringList;
+begin
+  SourceDir := ConcatPaths([Settings.GetProjectDir, 'DEBUILD', Settings.GetOrigFolderName]);
+  Script := TStringList.Create;
+  Script.Add('xterm -e "debuild -S -us -uc"');
+  RunShellCommands(SourceDir, Script);
+  Script.Free;
+end;
+
 procedure DoMakeBinaryPackage(Settings: TSettings; Sign: Boolean);
 begin
   Prepare(Settings);
@@ -112,6 +125,7 @@ end;
 procedure DoMakeSourcePackage(Settings: TSettings; Sign: Boolean; Upload: Boolean);
 begin
   Prepare(Settings);
+  DebuildSource(Settings);
   Settings.Free;
 end;
 
