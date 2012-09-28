@@ -97,6 +97,7 @@ type
     function GetProjectFileName: String;
     function GetOrigFolderName: String;
     function GetOrigTarName: String;
+    function GetProjectDir: String;
     procedure MakeTempFolder;
     function FillTemplate(Template: String): String;
   end;
@@ -123,7 +124,8 @@ end;
 
 destructor TSettings.Destroy;
 begin
-  DeleteDirectory(Tempfolder, False);
+  if DirectoryExists(Tempfolder) then
+    DeleteDirectory(Tempfolder, False);
   inherited Destroy;
 end;
 
@@ -210,17 +212,16 @@ end;
 function TSettings.GetExecutableName: String;
 var
   Opt: TBaseCompilerOptions;
-  Path: String;
 begin
   Opt := LazarusIDE.ActiveProject.LazCompilerOptions as TBaseCompilerOptions;
   Result := Opt.CreateTargetFilename(LazarusIDE.ActiveProject.MainFile.Filename);
-  Path := ExtractFilePath(LazarusIDE.ActiveProject.ProjectInfoFile);
-  Result := CreateRelativePath(Result, Path);
+  Result := CreateRelativePath(Result, GetProjectDir);
 end;
 
 function TSettings.GetProjectFileName: String;
 begin
-  Result := ExtractFileName(LazarusIDE.ActiveProject.ProjectInfoFile);
+  Result := LazarusIDE.ActiveProject.ProjectInfoFile;
+  Result := CreateRelativePath(Result, GetProjectDir);
 end;
 
 function TSettings.GetOrigFolderName: String;
@@ -231,6 +232,11 @@ end;
 function TSettings.GetOrigTarName: String;
 begin
   Result := Format('%s_%s.orig.tar.gz', [PackageName, GetVersion]);
+end;
+
+function TSettings.GetProjectDir: String;
+begin
+  Result := ExtractFileDir(LazarusIDE.ActiveProject.ProjectInfoFile);
 end;
 
 procedure TSettings.MakeTempFolder;
