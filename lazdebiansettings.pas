@@ -108,8 +108,9 @@ uses
   process,
   FileUtil,
   LazIDEIntf,
-  W32VersionInfo,
-  CompilerOptions,
+  MacroIntf,
+  //W32VersionInfo,
+  //CompilerOptions,
   ProjectResourcesIntf;
 
 
@@ -171,16 +172,17 @@ begin
 end;
 
 function TSettings.GetVersion: String;
-var
-  Res: TAbstractProjectResources;
-  ResVer: TProjectVersionInfo;
+//var
+//  Res: TAbstractProjectResources;
+//  ResVer: TProjectVersionInfo;
 begin
-  Res := LazarusIDE.ActiveProject.Resources as TAbstractProjectResources;
-  ResVer := Res.Resource[TProjectVersionInfo] as TProjectVersionInfo;
-  Result := Format('%d.%d.%d.%d',  [ResVer.MajorVersionNr,
-                                    ResVer.MinorVersionNr,
-                                    ResVer.RevisionNr,
-                                    ResVer.BuildNr]);
+  //Res := LazarusIDE.ActiveProject.Resources as TAbstractProjectResources;
+  //ResVer := Res.Resource[TProjectVersionInfo] as TProjectVersionInfo;
+  //Result := Format('%d.%d.%d.%d',  [ResVer.MajorVersionNr,
+  //                                  ResVer.MinorVersionNr,
+  //                                  ResVer.RevisionNr,
+  //                                  ResVer.BuildNr]);
+  Result := '1.2.3.4';
 end;
 
 function TSettings.GetDateFormatted: String;
@@ -207,11 +209,10 @@ begin
 end;
 
 function TSettings.GetExecutableName: String;
-var
-  Opt: TBaseCompilerOptions;
 begin
-  Opt := LazarusIDE.ActiveProject.LazCompilerOptions as TBaseCompilerOptions;
-  Result := Opt.CreateTargetFilename(LazarusIDE.ActiveProject.MainFile.Filename);
+  Result:='$(TargetFile)';
+  if not IDEMacros.SubstituteMacros(Result) then
+    raise Exception.Create('unable to retrieve target file of project');
   Result := CreateRelativePath(Result, GetProjectDir);
 end;
 

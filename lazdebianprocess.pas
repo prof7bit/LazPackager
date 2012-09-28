@@ -18,7 +18,8 @@ uses
   SysUtils,
   Forms,
   FileUtil,
-  LCLType;
+  LCLType,
+  LazIDEIntf;
 
 
 procedure CreateFile(FullPathName, Contents: String);
@@ -33,7 +34,7 @@ begin
   end;
 end;
 
-procedure CreateBuildScript(Settings: TSettings);
+procedure CreateBuildScript(Settings: TSettings; Binary, Sign, Upload: Boolean);
 var
   S: String;
   SName: String;
@@ -63,12 +64,20 @@ begin
     + 'mv ../copyright debian/' + LF
     + 'mv ../compat debian/' + LF
     + 'mv ../Makefile ./' + LF
-    + 'debuild -S -us -uc' + LF
-    ;
+    + LF;
 
-    SName := ConcatPaths([Settings.GetProjectDir, 'DEBUILD.sh']);
-    CreateFile(SName, S);
+  if Binary then
+    S += 'debuild -d -us -uc' + LF
+  else
+    S += 'debuild -S -us -uc' + LF;
 
+  if Sign then begin
+    S += 'cd ..' + LF;
+    S += 'xterm -e "debsign *.changes"' + LF;
+  end;
+
+  SName := ConcatPaths([Settings.GetProjectDir, 'DEBUILD.sh']);
+  CreateFile(SName, S);
 end;
 
 procedure CreateDebianFiles(Settings: TSettings);
@@ -88,31 +97,13 @@ begin
   CreateFile(ConcatPaths([DirDebuild, 'Makefile']), Settings.FillTemplate(Settings.Makefile));
 end;
 
-
-procedure DebuildSource(Settings: TSettings);
+procedure RunBuildScript(Settings: TSettings);
 var
-  SourceDir: String;
-  Script : TStringList;
+  ScriptName: String;
 begin
-  SourceDir := ConcatPaths([Settings.GetProjectDir, 'DEBUILD', Settings.GetOrigFolderName]);
-  Script := TStringList.Create;
-  Script.Add('debuild -S -us -uc');
-  //RunShellCommands(SourceDir, Script);
-  Script.Free;
-end;
+  ScriptName := ConcatPaths([Settings.GetProjectDir, 'DEBUILD.sh']);
 
-procedure DebuildBinary(Settings: TSettings);
-var
-  SourceDir: String;
-  Script : TStringList;
-begin
-  SourceDir := ConcatPaths([Settings.GetProjectDir, 'DEBUILD', Settings.GetOrigFolderName]);
-  Script := TStringList.Create;
-  Script.Add('debuild -d -us -uc');
-  //RunShellCommands(SourceDir, Script);
-  Script.Free;
 end;
-
 
 procedure WarnStillRunning;
 begin
@@ -121,12 +112,18 @@ end;
 
 procedure StartMakeBinaryPackage(Settings: TSettings; Sign: Boolean);
 begin
+  CreateDebianFiles(Settings);
+  CreateBuildScript(Settings, True, Sign, False);
+  RunBuildScript(Settings);
+  Settings.Free;
 end;
 
 procedure StartMakeSourcePackage(Settings: TSettings; Sign: Boolean; Upload: Boolean);
 begin
   CreateDebianFiles(Settings);
-  CreateBuildScript(Settings);
+  CreateBuildScript(Settings, False, Sign, Upload);
+  RunBuildScript(Settings);
+  Settings.Free;
 end;
 
 
