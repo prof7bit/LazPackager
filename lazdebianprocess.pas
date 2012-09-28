@@ -111,7 +111,19 @@ var
 begin
   SourceDir := ConcatPaths([Settings.GetProjectDir, 'DEBUILD', Settings.GetOrigFolderName]);
   Script := TStringList.Create;
-  Script.Add('xterm -e "debuild -S -us -uc"');
+  Script.Add('debuild -S -us -uc');
+  RunShellCommands(SourceDir, Script);
+  Script.Free;
+end;
+
+procedure DebuildBinary(Settings: TSettings);
+var
+  SourceDir: String;
+  Script : TStringList;
+begin
+  SourceDir := ConcatPaths([Settings.GetProjectDir, 'DEBUILD', Settings.GetOrigFolderName]);
+  Script := TStringList.Create;
+  Script.Add('debuild -d -us -uc');
   RunShellCommands(SourceDir, Script);
   Script.Free;
 end;
@@ -119,6 +131,7 @@ end;
 procedure DoMakeBinaryPackage(Settings: TSettings; Sign: Boolean);
 begin
   Prepare(Settings);
+  DebuildBinary(Settings);
   Settings.Free;
 end;
 

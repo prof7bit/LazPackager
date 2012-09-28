@@ -28,8 +28,8 @@ const
     + LF
     + '.PHONY : install'+ LF
     + 'install:'+ LF
-    + TAB + 'mkdir -p $(DESTDIR)($PREFIX)/bin'+ LF
-    + TAB + 'install ?EXECUTABLE? $(DESTDIR)($PREFIX)/bin/'+ LF;
+    + TAB + 'mkdir -p $(DESTDIR)$(PREFIX)/bin'+ LF
+    + TAB + 'install ?EXECUTABLE? $(DESTDIR)$(PREFIX)/bin/'+ LF;
 
   DEFAULT_CONTROL
     = 'Source: ?PACKAGE_NAME?'+ LF
