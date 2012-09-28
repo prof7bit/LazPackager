@@ -16,10 +16,12 @@ uses
 
 procedure DoMakeBinaryPackage(Settings: TSettings; Sign: Boolean);
 begin
+  Settings.Free;
 end;
 
 procedure DoMakeSourcePackage(Settings: TSettings; Sign: Boolean; Upload: Boolean);
 begin
+  Settings.Free;
 end;
 
 

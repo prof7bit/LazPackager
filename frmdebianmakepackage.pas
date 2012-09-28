@@ -17,6 +17,7 @@ type
     btnCreate: TButton;
     chkSign: TCheckBox;
     chkUpload: TCheckBox;
+    procedure btnCreateClick(Sender: TObject);
     procedure chkSignChange(Sender: TObject);
     procedure chkUploadChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -30,6 +31,9 @@ var
   FMakePackage: TFMakePackage;
 
 implementation
+uses
+  lazdebiansettings,
+  lazdebianprocess;
 
 {$R *.lfm}
 
@@ -50,6 +54,21 @@ procedure TFMakePackage.chkSignChange(Sender: TObject);
 begin
   if not chkSign.Checked then
     chkUpload.Checked := False;
+end;
+
+procedure TFMakePackage.btnCreateClick(Sender: TObject);
+var
+  Settings: TSettings;
+  Sign: Boolean;
+  Upload: Boolean;
+begin
+  Settings := TSettings.Create;
+  Sign := chkSign.Checked;
+  Upload := chkUpload.Checked;
+  if FTyp = debBinary then
+    DoMakeBinaryPackage(Settings, Sign)
+  else
+    DoMakeSourcePackage(Settings, Sign, Upload);
 end;
 
 procedure TFMakePackage.SetType(Typ: TPackageType);

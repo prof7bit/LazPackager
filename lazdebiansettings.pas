@@ -84,16 +84,20 @@ type
     Rules: String;
     Changelog: String;
     Copyright: String;
+    Tempfolder: String;
     constructor Create;
     destructor Destroy; override;
     procedure Save;
     procedure Load;
     procedure SaveValue(Key, Value: String);
+    function LoadValue(Key, DefaultValue: String): String;
     function GetVersion: String;
     function GetDateFormatted: String;
     function GetExecutableName: String;
     function GetProjectFileName: String;
-    function LoadValue(Key, DefaultValue: String): String;
+    function GetOrigFolderName: String;
+    function GetOrigTarName: String;
+    procedure MakeTempFolder;
     function FillTemplate(Template: String): String;
   end;
 
@@ -114,10 +118,12 @@ uses
 constructor TSettings.Create;
 begin
   Load;
+  MakeTempFolder;
 end;
 
 destructor TSettings.Destroy;
 begin
+  DeleteDirectory(Tempfolder, False);
   inherited Destroy;
 end;
 
@@ -217,6 +223,29 @@ begin
   Result := ExtractFileName(LazarusIDE.ActiveProject.ProjectInfoFile);
 end;
 
+function TSettings.GetOrigFolderName: String;
+begin
+  Result := Format('%s-%s', [PackageName, GetVersion]);
+end;
+
+function TSettings.GetOrigTarName: String;
+begin
+  Result := Format('%s_%s.orig.tar.gz', [PackageName, GetVersion]);
+end;
+
+procedure TSettings.MakeTempFolder;
+var
+  Tmp: String;
+begin
+  Tmp := GetTempDir;
+  if Tempfolder <> '' then
+    DeleteDirectory(Tempfolder, False);
+  Tempfolder := ConcatPaths([Tmp, GetOrigFolderName]);
+  if DirectoryExists(Tempfolder) then
+    DeleteDirectory(Tempfolder, False);
+  MkDir(Tempfolder);
+end;
+
 function TSettings.LoadValue(Key, DefaultValue: String): String;
 begin
   Result := LazarusIDE.ActiveProject.CustomData.Values[Key];
@@ -229,7 +258,6 @@ end;
 function TSettings.FillTemplate(Template: String): String;
 var
   Version: String;
-  Tempfolder: String;
 
   procedure Replace(R: array of String);
   var

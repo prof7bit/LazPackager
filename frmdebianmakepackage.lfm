@@ -21,6 +21,7 @@ object FMakePackage: TFMakePackage
     Anchors = [akRight, akBottom]
     Caption = 'Make it so!'
     ModalResult = 1
+    OnClick = btnCreateClick
     TabOrder = 0
   end
   object btnCancel: TButton
