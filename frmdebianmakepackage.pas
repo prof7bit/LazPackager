@@ -66,9 +66,9 @@ begin
   Sign := chkSign.Checked;
   Upload := chkUpload.Checked;
   if FTyp = debBinary then
-    DoMakeBinaryPackage(Settings, Sign)
+    StartMakeBinaryPackage(Settings, Sign)
   else
-    DoMakeSourcePackage(Settings, Sign, Upload);
+    StartMakeSourcePackage(Settings, Sign, Upload);
 end;
 
 procedure TFMakePackage.SetType(Typ: TPackageType);

@@ -98,7 +98,6 @@ type
     function GetOrigFolderName: String;
     function GetOrigTarName: String;
     function GetProjectDir: String;
-    procedure MakeTempFolder;
     function FillTemplate(Template: String): String;
   end;
 
@@ -119,13 +118,11 @@ uses
 constructor TSettings.Create;
 begin
   Load;
-  MakeTempFolder;
+  Tempfolder := ConcatPaths([GetTempDir, GetOrigFolderName]);
 end;
 
 destructor TSettings.Destroy;
 begin
-  if DirectoryExists(Tempfolder) then
-    DeleteDirectory(Tempfolder, False);
   inherited Destroy;
 end;
 
@@ -237,19 +234,6 @@ end;
 function TSettings.GetProjectDir: String;
 begin
   Result := ExtractFileDir(LazarusIDE.ActiveProject.ProjectInfoFile);
-end;
-
-procedure TSettings.MakeTempFolder;
-var
-  Tmp: String;
-begin
-  Tmp := GetTempDir;
-  if Tempfolder <> '' then
-    DeleteDirectory(Tempfolder, False);
-  Tempfolder := ConcatPaths([Tmp, GetOrigFolderName]);
-  if DirectoryExists(Tempfolder) then
-    DeleteDirectory(Tempfolder, False);
-  MkDir(Tempfolder);
 end;
 
 function TSettings.LoadValue(Key, DefaultValue: String): String;
