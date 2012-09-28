@@ -19,8 +19,18 @@ uses
   Forms,
   FileUtil,
   LCLType,
-  LazIDEIntf;
+  LazIDEIntf,
+  IDEExternToolIntf;
 
+type
+  { TDummy need only one instance of this and only because
+    QueueAsyncCall wants a method and not a procedure}
+  TDummy = class
+    procedure RunBuildScriptLater(D: PtrInt);
+  end;
+
+var
+  DummyObj: TDummy;
 
 procedure CreateFile(FullPathName, Contents: String);
 var
@@ -98,11 +108,8 @@ begin
 end;
 
 procedure RunBuildScript(Settings: TSettings);
-var
-  ScriptName: String;
 begin
-  ScriptName := ConcatPaths([Settings.GetProjectDir, 'DEBUILD.sh']);
-
+  Application.QueueAsyncCall(@DummyObj.RunBuildScriptLater, PtrInt(Settings));
 end;
 
 procedure WarnStillRunning;
@@ -115,7 +122,6 @@ begin
   CreateDebianFiles(Settings);
   CreateBuildScript(Settings, True, Sign, False);
   RunBuildScript(Settings);
-  Settings.Free;
 end;
 
 procedure StartMakeSourcePackage(Settings: TSettings; Sign: Boolean; Upload: Boolean);
@@ -123,9 +129,29 @@ begin
   CreateDebianFiles(Settings);
   CreateBuildScript(Settings, False, Sign, Upload);
   RunBuildScript(Settings);
+end;
+
+{ TScriptRunner }
+
+procedure TDummy.RunBuildScriptLater(D: PtrInt);
+var
+  Settings: TSettings;
+  Tool: TIDEExternalToolOptions;
+begin
+  Settings := TSettings(D);
+  Tool := TIDEExternalToolOptions.Create;
+  Tool.Filename := '/bin/sh';
+  Tool.CmdLineParams := 'DEBUILD.sh';
+  Tool.WorkingDirectory := Settings.GetProjectDir;
+  Tool.ShowAllOutput := True;
+  RunExternalTool(Tool);
+  Tool.Free;
   Settings.Free;
 end;
 
-
+initialization
+  DummyObj := TDummy.Create;
+finalization
+  DummyObj.Free;
 end.
 

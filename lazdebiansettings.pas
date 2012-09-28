@@ -110,7 +110,6 @@ uses
   LazIDEIntf,
   MacroIntf,
   //W32VersionInfo,
-  //CompilerOptions,
   ProjectResourcesIntf;
 
 
