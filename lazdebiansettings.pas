@@ -405,6 +405,10 @@ begin
     S += 'xterm -e "debsign *.changes"' + LF;
   end;
 
+  if Upload then begin
+    S += Format('dput %s *.changes', [PPA]) + LF;
+  end;
+
   SName := ConcatPaths([GetProjectPathAbsolute, 'DEBUILD.sh']);
   CreateFile(SName, S);
 end;
