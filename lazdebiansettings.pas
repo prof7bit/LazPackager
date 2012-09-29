@@ -13,7 +13,8 @@ const
     + 'cp *.lpr ?TEMPFOLDER?' + LF
     + 'cp *.pas ?TEMPFOLDER?' + LF
     + 'cp *.lfm ?TEMPFOLDER?' + LF
-    + 'cp *.ico ?TEMPFOLDER?' + LF;
+    + 'cp *.ico ?TEMPFOLDER?' + LF
+    ;
 
   DEFAULT_MAKEFILE
     = 'PREFIX = /usr/local'+ LF
@@ -35,7 +36,8 @@ const
     + '.PHONY : install'+ LF
     + 'install:'+ LF
     + TAB + 'mkdir -p $(BINDIR)'+ LF
-    + TAB + 'install -s ?EXECUTABLE? $(BINDIR)/'+ LF;
+    + TAB + 'install -s ?EXECUTABLE? $(BINDIR)/'+ LF
+    ;
 
   DEFAULT_CONTROL
     = 'Source: ?PACKAGE_NAME?'+ LF
@@ -49,7 +51,8 @@ const
     + 'Architecture: any'+ LF
     + 'Depends: ${shlibs:Depends}, ${misc:Depends},'+ LF
     + 'Description: ?DESCRIPTION?'+ LF
-    + ' ?DESCRIPTION_LONG?'+ LF;
+    + ' ?DESCRIPTION_LONG?'+ LF
+    ;
 
   DEFAULT_RULES
     = '#!/usr/bin/make -f' + LF
@@ -63,22 +66,41 @@ const
     + TAB + 'dh_auto_install -- PREFIX=/usr' + LF
     + LF
     + '%:' + LF
-    + TAB + 'dh $@' + LF;
+    + TAB + 'dh $@' + LF
+    ;
 
   DEFAULT_CHANGELOG
     = '?PACKAGE_NAME? (?FULLVERSION?) ?SERIES?; urgency=low' + LF
     + LF
     + '  * Original version ?VERSION? packaged with lazdebian' + LF
     + LF
-    + ' -- ?MAINTAINER? <?MAINTAINER_EMAIL?>  ?DATE?' + LF;
+    + ' -- ?MAINTAINER? <?MAINTAINER_EMAIL?>  ?DATE?' + LF
+    ;
 
   DEFAULT_COPYRIGHT
     = 'Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/' + LF
     + LF
     + 'Files: *' + LF
     + 'Copyright: ?COPYRIGHT?' + LF
-    + 'License: ?LICENSE?' + LF
-    + ' ?LICENSE_LONG?' + LF;
+    + 'License: GPL-2+' + LF
+    + ' This program is free software; you can redistribute it and/or modify' + LF
+    + ' it under the terms of the GNU General Public License as published by' + LF
+    + ' the Free Software Foundation; either version 2 of the License, or' + LF
+    + ' at your option) any later version.' + LF
+    + ' .' + LF
+    + ' This program is distributed in the hope that it will be useful,' + LF
+    + ' but WITHOUT ANY WARRANTY; without even the implied warranty of' + LF
+    + ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the' + LF
+    + ' GNU General Public License for more details.' + LF
+    + ' .' + LF
+    + ' You should have received a copy of the GNU General Public License along' + LF
+    + ' with this program; if not, write to the Free Software Foundation, Inc.,' + LF
+    + ' 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.' + LF
+    + ' .' + LF
+    + ' On Debian systems, the full text of the GNU General Public' + LF
+    + ' License version 2 can be found in the file' + LF
+    + ' /usr/share/common-licenses/GPL-2' + LF
+    ;
 
 type
   { TSettings }

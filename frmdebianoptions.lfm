@@ -1,11 +1,11 @@
 object FDebianOptions: TFDebianOptions
-  Left = 124
-  Height = 506
-  Top = 145
-  Width = 839
+  Left = 51
+  Height = 550
+  Top = 99
+  Width = 923
   Caption = 'Debian package creation options'
-  ClientHeight = 506
-  ClientWidth = 839
+  ClientHeight = 550
+  ClientWidth = 923
   Constraints.MinHeight = 500
   Constraints.MinWidth = 800
   OnClose = FormClose
@@ -22,9 +22,9 @@ object FDebianOptions: TFDebianOptions
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 466
+    Height = 510
     Top = 0
-    Width = 839
+    Width = 923
     ActivePage = PageOptions
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Bottom = 40
@@ -32,8 +32,8 @@ object FDebianOptions: TFDebianOptions
     TabOrder = 0
     object PageOptions: TTabSheet
       Caption = 'Options'
-      ClientHeight = 440
-      ClientWidth = 837
+      ClientHeight = 484
+      ClientWidth = 921
       object GrpMaintainer: TGroupBox
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = PageOptions
@@ -41,8 +41,8 @@ object FDebianOptions: TFDebianOptions
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = PageOptions
         AnchorSideBottom.Side = asrBottom
-        Left = 406
-        Height = 433
+        Left = 490
+        Height = 477
         Top = 3
         Width = 427
         Anchors = [akTop, akRight, akBottom]
@@ -50,7 +50,7 @@ object FDebianOptions: TFDebianOptions
         BorderSpacing.Right = 4
         BorderSpacing.Bottom = 4
         Caption = 'Package Maintainer (you)'
-        ClientHeight = 415
+        ClientHeight = 459
         ClientWidth = 423
         TabOrder = 0
         object txtMaintainerName: TEdit
@@ -89,7 +89,7 @@ object FDebianOptions: TFDebianOptions
           AnchorSideBottom.Side = asrBottom
           Left = 115
           Height = 26
-          Top = 381
+          Top = 425
           Width = 300
           Anchors = [akLeft, akRight, akBottom]
           BorderSpacing.Left = 115
@@ -124,7 +124,7 @@ object FDebianOptions: TFDebianOptions
           AnchorSideBottom.Side = asrBottom
           Left = 8
           Height = 17
-          Top = 386
+          Top = 430
           Width = 88
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 8
@@ -200,7 +200,7 @@ object FDebianOptions: TFDebianOptions
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = txtPPA
           Left = 115
-          Height = 152
+          Height = 196
           Top = 219
           Width = 300
           Anchors = [akTop, akLeft, akRight, akBottom]
@@ -231,7 +231,7 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageOptions
         AnchorSideBottom.Side = asrBottom
         Left = 4
-        Height = 433
+        Height = 477
         Top = 3
         Width = 390
         Anchors = [akTop, akLeft, akBottom]
@@ -239,7 +239,7 @@ object FDebianOptions: TFDebianOptions
         BorderSpacing.Top = 3
         BorderSpacing.Bottom = 4
         Caption = 'Software Author'
-        ClientHeight = 415
+        ClientHeight = 459
         ClientWidth = 386
         TabOrder = 1
         object txtCopyright: TEdit
@@ -289,7 +289,7 @@ object FDebianOptions: TFDebianOptions
           AnchorSideBottom.Control = GrpAuthor
           AnchorSideBottom.Side = asrBottom
           Left = 80
-          Height = 152
+          Height = 196
           Top = 255
           Width = 298
           Anchors = [akTop, akLeft, akRight, akBottom]
@@ -298,7 +298,7 @@ object FDebianOptions: TFDebianOptions
           BorderSpacing.Right = 8
           BorderSpacing.Bottom = 8
           Lines.Strings = (
-            'txtLicenseLong'
+            'txtDescriptionLong'
           )
           ScrollBars = ssAutoBoth
           TabOrder = 2
@@ -385,8 +385,8 @@ object FDebianOptions: TFDebianOptions
     end
     object PageMakefile: TTabSheet
       Caption = 'Makefile'
-      ClientHeight = 440
-      ClientWidth = 837
+      ClientHeight = 484
+      ClientWidth = 921
       object MakefileOptions: TRadioGroup
         Left = 7
         Height = 73
@@ -421,9 +421,9 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageMakefile
         AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 424
+        Height = 430
         Top = 10
-        Width = 603
+        Width = 696
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -931,8 +931,8 @@ object FDebianOptions: TFDebianOptions
     end
     object PageControl: TTabSheet
       Caption = 'debian/control'
-      ClientHeight = 440
-      ClientWidth = 837
+      ClientHeight = 484
+      ClientWidth = 921
       inline EdControl: TSynEdit
         AnchorSideLeft.Control = BtnResetControl
         AnchorSideLeft.Side = asrBottom
@@ -942,9 +942,9 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageControl
         AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 424
+        Height = 430
         Top = 10
-        Width = 603
+        Width = 696
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1452,8 +1452,8 @@ object FDebianOptions: TFDebianOptions
     end
     object PageRules: TTabSheet
       Caption = 'debian/rules'
-      ClientHeight = 440
-      ClientWidth = 837
+      ClientHeight = 484
+      ClientWidth = 921
       inline EdRules: TSynEdit
         AnchorSideLeft.Control = BtnResetRules
         AnchorSideLeft.Side = asrBottom
@@ -1463,9 +1463,9 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageRules
         AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 424
+        Height = 430
         Top = 10
-        Width = 603
+        Width = 696
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1973,8 +1973,8 @@ object FDebianOptions: TFDebianOptions
     end
     object PageChangelog: TTabSheet
       Caption = 'debian/changelog'
-      ClientHeight = 440
-      ClientWidth = 837
+      ClientHeight = 484
+      ClientWidth = 921
       inline EdChangelog: TSynEdit
         AnchorSideLeft.Control = BtnResetChangelog
         AnchorSideLeft.Side = asrBottom
@@ -1984,9 +1984,9 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageChangelog
         AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 424
+        Height = 430
         Top = 10
-        Width = 603
+        Width = 696
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -2494,8 +2494,8 @@ object FDebianOptions: TFDebianOptions
     end
     object PageCopyright: TTabSheet
       Caption = 'debian/copyright'
-      ClientHeight = 440
-      ClientWidth = 837
+      ClientHeight = 484
+      ClientWidth = 921
       inline EdCopyright: TSynEdit
         AnchorSideLeft.Control = BtnResetCopyright
         AnchorSideLeft.Side = asrBottom
@@ -2505,9 +2505,9 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageCopyright
         AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 424
+        Height = 430
         Top = 10
-        Width = 603
+        Width = 696
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -3015,9 +3015,9 @@ object FDebianOptions: TFDebianOptions
     end
   end
   object BtnOK: TButton
-    Left = 755
+    Left = 839
     Height = 25
-    Top = 471
+    Top = 515
     Width = 75
     Anchors = [akRight, akBottom]
     Caption = 'Ok'
