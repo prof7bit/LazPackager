@@ -102,19 +102,36 @@ type
     function GetDebuildSrcPathAbsolute: String;
     function GetDebuildSrcDebianPathAbsolute: String;
     function FillTemplate(Template: String): String;
-  end;
 
+    procedure CreateBuildScript(Binary, Sign, Upload: Boolean);
+    procedure CreateDebianFiles;
+    procedure RunBuildScript(Data: PtrInt);
+  end;
 
 implementation
 uses
+  Classes,
   sysutils,
   process,
   FileUtil,
   LazIDEIntf,
   MacroIntf,
   //W32VersionInfo,
+  IDEExternToolIntf,
   ProjectResourcesIntf;
 
+
+procedure CreateFile(FullPathName, Contents: String);
+var
+  S: TFileStream;
+begin
+  try
+    S := TFileStream.Create(FullPathName, fmCreate);
+    S.Write(Contents[1], Length(Contents));
+  finally
+    S.Free;
+  end;
+end;
 
 { TSettings }
 
@@ -300,6 +317,82 @@ begin
           ]);
 
   Result := Template;
+end;
+
+procedure TSettings.CreateBuildScript(Binary, Sign, Upload: Boolean);
+var
+  S: String;
+  SName: String;
+  DEBUILD: STRING;
+begin
+  s := '#!/bin/sh' + LF
+    + LF
+    + Format('cd "%s"', [GetProjectPathAbsolute]) + LF
+    + Format('mkdir -p %s', [GetTempPathAbsolute]) + LF
+    + FillTemplate(ExportCommands) + LF
+    + LF
+    + Format('cd %s', [GetTempPathAbsolute]) + LF
+    + 'rm -rf DEBUILD' + LF
+    + 'rm -f DEBUILD.sh' + LF
+    + LF
+    + 'cd ..' + LF
+    + Format('tar czf %s %s', [GetOrigTarNameOnly, GetOrigFolderNameOnly]) + LF
+    + Format('mv %s "%s"', [GetOrigFolderNameOnly, GetDebuildPathAbsolute]) + LF
+    + Format('mv %s "%s"', [GetOrigTarNameOnly, GetDebuildPathAbsolute]) + LF
+    + LF
+    + Format('cd "%s"', [GetDebuildSrcPathAbsolute]) + LF
+    + 'mkdir debian' + LF
+    + 'mv ../control debian/' + LF
+    + 'mv ../rules debian/' + LF
+    + 'mv ../changelog debian/' + LF
+    + 'mv ../copyright debian/' + LF
+    + 'mv ../compat debian/' + LF
+    + 'mv ../Makefile ./' + LF
+    + LF;
+
+  if Binary then
+    S += 'debuild -d -us -uc' + LF
+  else
+    S += 'debuild -S -us -uc' + LF;
+
+  if Sign then begin
+    S += 'cd ..' + LF;
+    S += 'xterm -e "debsign *.changes"' + LF;
+  end;
+
+  SName := ConcatPaths([GetProjectPathAbsolute, 'DEBUILD.sh']);
+  CreateFile(SName, S);
+end;
+
+procedure TSettings.CreateDebianFiles;
+var
+  DirDebuild: String;
+begin
+  DirDebuild := GetDebuildPathAbsolute;
+  if DirectoryExists(DirDebuild) then
+    DeleteDirectory(DirDebuild, False);
+  MkDir(DirDebuild);
+  CreateFile(ConcatPaths([DirDebuild, 'compat']), '8');
+  CreateFile(ConcatPaths([DirDebuild, 'control']), FillTemplate(Control));
+  CreateFile(ConcatPaths([DirDebuild, 'rules']), FillTemplate(Rules));
+  CreateFile(ConcatPaths([DirDebuild, 'changelog']), FillTemplate(Changelog));
+  CreateFile(ConcatPaths([DirDebuild, 'copyright']), FillTemplate(Copyright));
+  {$warning FIXME: respect the setting "Makefile / Use Existing", implement this!}
+  CreateFile(ConcatPaths([DirDebuild, 'Makefile']), FillTemplate(Makefile));
+end;
+
+procedure TSettings.RunBuildScript(Data: PtrInt);
+var
+  Tool: TIDEExternalToolOptions;
+begin
+  Tool := TIDEExternalToolOptions.Create;
+  Tool.Filename := '/bin/sh';
+  Tool.CmdLineParams := 'DEBUILD.sh';
+  Tool.WorkingDirectory := GetProjectPathAbsolute;
+  Tool.ShowAllOutput := True;
+  RunExternalTool(Tool);
+  Tool.Free;
+  Self.Free;
 end;
 
 end.
