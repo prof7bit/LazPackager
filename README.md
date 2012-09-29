@@ -46,5 +46,5 @@ signature.
 
 Does it work yet?
 -----------------
-Almost, but no upload yet, detection of version number is currently broken, 
-default templates still have minor errors, not yet ready for production.
+Almost. Detection of version number is currently broken, so it is not
+really useful yet.
