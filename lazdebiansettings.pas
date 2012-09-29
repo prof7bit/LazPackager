@@ -157,9 +157,32 @@ uses
   process,
   FileUtil,
   LazIDEIntf,
+  ProjectResourcesIntf,
   MacroIntf,
   //W32VersionInfo,
   IDEExternToolIntf;
+
+type
+
+  { TMyAbstractProjectResources }
+  TMyAbstractProjectResources = class(TAbstractProjectResources)
+    // need this to call a protected class function
+    class function GetList: TList;
+  end;
+
+  TFileProductVersion = array[0..3] of word;
+
+  {This should have the same memory layout as the original one}
+  TSameLayoutAsTProjectVersionInfo = class(TAbstractProjectResource)
+    FAutoIncrementBuild: boolean;
+    FHexCharSet: string;
+    FHexLang: string;
+    FStringTable: TObject;
+    FUseVersionInfo: boolean;
+    FVersion: TFileProductVersion;
+    // more fields follow but we are not
+    // interested anymore, only need FVersion
+  end;
 
 
 procedure CreateFile(FullPathName, Contents: String);
@@ -172,6 +195,13 @@ begin
   finally
     S.Free;
   end;
+end;
+
+{ TAbstractProjectResources1 }
+
+class function TMyAbstractProjectResources.GetList: TList;
+begin
+  Result := GetRegisteredResources;
 end;
 
 { TSettings }
@@ -231,17 +261,29 @@ begin
 end;
 
 function TSettings.GetVersion: String;
-//var
-//  Res: TAbstractProjectResources;
-//  ResVer: TProjectVersionInfo;
+var
+  ResList: TAbstractProjectResources;
+  Resource: TAbstractProjectResource;
+  ResClass: TAbstractProjectResourceClass;
+  ResClassList: TList;
+  P: Pointer;
+  VerInfo: TSameLayoutAsTProjectVersionInfo;
+
 begin
-  //Res := LazarusIDE.ActiveProject.Resources as TAbstractProjectResources;
-  //ResVer := Res.Resource[TProjectVersionInfo] as TProjectVersionInfo;
-  //Result := Format('%d.%d.%d.%d',  [ResVer.MajorVersionNr,
-  //                                  ResVer.MinorVersionNr,
-  //                                  ResVer.RevisionNr,
-  //                                  ResVer.BuildNr]);
-  Result := '1.2.3.4';
+  ResList := LazarusIDE.ActiveProject.Resources as TAbstractProjectResources;
+  ResClassList := TMyAbstractProjectResources.GetList;
+  for P in ResClassList do begin
+    ResClass := TAbstractProjectResourceClass(p);
+    Resource := ResList.Resource[ResClass];
+    if Resource.ClassName = 'TProjectVersionInfo' then begin
+      VerInfo := TSameLayoutAsTProjectVersionInfo(Resource);
+      Result := Format('%d.%d.%d.%d', [VerInfo.FVersion[0],
+                                       VerInfo.FVersion[1],
+                                       VerInfo.FVersion[2],
+                                       VerInfo.FVersion[3]]);
+      break;
+    end;
+  end;
 end;
 
 function TSettings.GetDateFormatted: String;
