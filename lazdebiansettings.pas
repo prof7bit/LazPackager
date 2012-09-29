@@ -346,7 +346,9 @@ begin
     + Format('mv %s "%s"', [GetOrigTarNameOnly, GetDebuildPathAbsolute]) + LF
     + LF
     + Format('cd "%s"', [GetDebuildSrcPathAbsolute]) + LF
-    + 'mkdir debian' + LF
+    + 'mkdir -p debian/source' + LF
+    + 'echo "1.0" > debian/source/format' + LF
+    + 'echo "8" > debian/compat' + LF
     + 'mv ../control debian/' + LF
     + 'mv ../rules debian/' + LF
     + 'chmod +x debian/rules' + LF
@@ -378,7 +380,6 @@ begin
   if DirectoryExists(DirDebuild) then
     DeleteDirectory(DirDebuild, False);
   MkDir(DirDebuild);
-  CreateFile(ConcatPaths([DirDebuild, 'compat']), '8');
   CreateFile(ConcatPaths([DirDebuild, 'control']), FillTemplate(Control));
   CreateFile(ConcatPaths([DirDebuild, 'rules']), FillTemplate(Rules));
   CreateFile(ConcatPaths([DirDebuild, 'changelog']), FillTemplate(Changelog));
