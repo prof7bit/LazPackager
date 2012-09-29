@@ -46,10 +46,5 @@ signature.
 
 Does it work yet?
 -----------------
-No. Its not yet finished, not even partially. The only thing that worked
-was a simple hackish proof of concept (not part of this project) which I
-made earlier to investigate what exactly is needed and to make sure it
-will be possible at all. But now after I believe have understood enough of
-the Debian workflow and all its requirements I should be able to make a
-nice high quality and intuitive Lazarus IDE plugin from it soon :-)
-
+Almost, but no upload yet, detection of version number is currently broken, 
+default templates still have minor errors, not yet ready for production.
