@@ -368,6 +368,8 @@ var
 begin
   s := '#!/bin/sh' + LF
     + LF
+    + 'set -v' + LF
+    + 'set -e' + LF
     + Format('cd "%s"', [GetProjectPathAbsolute]) + LF
     + Format('mkdir -p %s', [GetTempPathAbsolute]) + LF
     + FillTemplate(ExportCommands) + LF
@@ -390,7 +392,6 @@ begin
     + 'chmod +x debian/rules' + LF
     + 'mv ../changelog debian/' + LF
     + 'mv ../copyright debian/' + LF
-    + 'mv ../compat debian/' + LF
     + 'mv ../Makefile ./' + LF
     + LF;
 
