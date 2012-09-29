@@ -84,7 +84,6 @@ type
     Rules: String;
     Changelog: String;
     Copyright: String;
-    Tempfolder: String;
     constructor Create;
     destructor Destroy; override;
     procedure Save;
@@ -93,11 +92,15 @@ type
     function LoadValue(Key, DefaultValue: String): String;
     function GetVersion: String;
     function GetDateFormatted: String;
-    function GetExecutableName: String;
-    function GetProjectFileName: String;
-    function GetOrigFolderName: String;
-    function GetOrigTarName: String;
-    function GetProjectDir: String;
+    function GetExecutableFilenameRelative: String;
+    function GetProjectFilenameRelative: String;
+    function GetOrigFolderNameOnly: String;
+    function GetTempPathAbsolute: String;
+    function GetOrigTarNameOnly: String;
+    function GetProjectPathAbsolute: String;
+    function GetDebuildPathAbsolute: String;
+    function GetDebuildSrcPathAbsolute: String;
+    function GetDebuildSrcDebianPathAbsolute: String;
     function FillTemplate(Template: String): String;
   end;
 
@@ -118,7 +121,6 @@ uses
 constructor TSettings.Create;
 begin
   Load;
-  Tempfolder := ConcatPaths([GetTempDir, GetOrigFolderName]);
 end;
 
 destructor TSettings.Destroy;
@@ -207,33 +209,53 @@ begin
   P.Free;
 end;
 
-function TSettings.GetExecutableName: String;
+function TSettings.GetExecutableFilenameRelative: String;
 begin
   Result:='$(TargetFile)';
   if not IDEMacros.SubstituteMacros(Result) then
     raise Exception.Create('unable to retrieve target file of project');
-  Result := CreateRelativePath(Result, GetProjectDir);
+  Result := CreateRelativePath(Result, GetProjectPathAbsolute);
 end;
 
-function TSettings.GetProjectFileName: String;
+function TSettings.GetProjectFilenameRelative: String;
 begin
   Result := LazarusIDE.ActiveProject.ProjectInfoFile;
-  Result := CreateRelativePath(Result, GetProjectDir);
+  Result := CreateRelativePath(Result, GetProjectPathAbsolute);
 end;
 
-function TSettings.GetOrigFolderName: String;
+function TSettings.GetOrigFolderNameOnly: String;
 begin
   Result := Format('%s-%s', [PackageName, GetVersion]);
 end;
 
-function TSettings.GetOrigTarName: String;
+function TSettings.GetTempPathAbsolute: String;
+begin
+  Result := ConcatPaths([GetTempDir, GetOrigFolderNameOnly]);
+end;
+
+function TSettings.GetOrigTarNameOnly: String;
 begin
   Result := Format('%s_%s.orig.tar.gz', [PackageName, GetVersion]);
 end;
 
-function TSettings.GetProjectDir: String;
+function TSettings.GetProjectPathAbsolute: String;
 begin
   Result := ExtractFileDir(LazarusIDE.ActiveProject.ProjectInfoFile);
+end;
+
+function TSettings.GetDebuildPathAbsolute: String;
+begin
+  Result := ConcatPaths([GetProjectPathAbsolute, 'DEBUILD']);
+end;
+
+function TSettings.GetDebuildSrcPathAbsolute: String;
+begin
+  Result := ConcatPaths([GetDebuildPathAbsolute, GetOrigFolderNameOnly]);
+end;
+
+function TSettings.GetDebuildSrcDebianPathAbsolute: String;
+begin
+  Result := ConcatPaths([GetDebuildSrcPathAbsolute, 'debian']);
 end;
 
 function TSettings.LoadValue(Key, DefaultValue: String): String;
@@ -272,9 +294,9 @@ begin
           ,'?VERSION?',           Version
           ,'?FULLVERSION?',       Version + '-1'
           ,'?DATE?',              GetDateFormatted
-          ,'?EXECUTABLE?',        GetExecutableName
-          ,'?PROJECT?',           GetProjectFileName
-          ,'?TEMPFOLDER?',        Tempfolder
+          ,'?EXECUTABLE?',        GetExecutableFilenameRelative
+          ,'?PROJECT?',           GetProjectFilenameRelative
+          ,'?TEMPFOLDER?',        GetTempPathAbsolute
           ]);
 
   Result := Template;

@@ -50,23 +50,22 @@ var
   SName: String;
   DEBUILD: STRING;
 begin
-  DEBUILD := ConcatPaths([Settings.GetProjectDir, 'DEBUILD']);
   s := '#!/bin/sh' + LF
     + LF
-    + Format('cd "%s"', [Settings.GetProjectDir]) + LF
-    + Format('mkdir -p %s', [Settings.Tempfolder]) + LF
+    + Format('cd "%s"', [Settings.GetProjectPathAbsolute]) + LF
+    + Format('mkdir -p %s', [Settings.GetTempPathAbsolute]) + LF
     + Settings.FillTemplate(Settings.ExportCommands) + LF
     + LF
-    + Format('cd %s', [Settings.Tempfolder]) + LF
+    + Format('cd %s', [Settings.GetTempPathAbsolute]) + LF
     + 'rm -rf DEBUILD' + LF
     + 'rm -f DEBUILD.sh' + LF
     + LF
     + 'cd ..' + LF
-    + Format('tar czf %s %s', [Settings.GetOrigTarName, Settings.GetOrigFolderName]) + LF
-    + Format('mv %s "%s"', [Settings.GetOrigFolderName, DEBUILD]) + LF
-    + Format('mv %s "%s"', [Settings.GetOrigTarName, DEBUILD]) + LF
+    + Format('tar czf %s %s', [Settings.GetOrigTarNameOnly, Settings.GetOrigFolderNameOnly]) + LF
+    + Format('mv %s "%s"', [Settings.GetOrigFolderNameOnly, Settings.GetDebuildPathAbsolute]) + LF
+    + Format('mv %s "%s"', [Settings.GetOrigTarNameOnly, Settings.GetDebuildPathAbsolute]) + LF
     + LF
-    + Format('cd "%s"', [ConcatPaths([DEBUILD, Settings.GetOrigFolderName])]) + LF
+    + Format('cd "%s"', [Settings.GetDebuildSrcPathAbsolute]) + LF
     + 'mkdir debian' + LF
     + 'mv ../control debian/' + LF
     + 'mv ../rules debian/' + LF
@@ -86,7 +85,7 @@ begin
     S += 'xterm -e "debsign *.changes"' + LF;
   end;
 
-  SName := ConcatPaths([Settings.GetProjectDir, 'DEBUILD.sh']);
+  SName := ConcatPaths([Settings.GetProjectPathAbsolute, 'DEBUILD.sh']);
   CreateFile(SName, S);
 end;
 
@@ -94,7 +93,7 @@ procedure CreateDebianFiles(Settings: TSettings);
 var
   DirDebuild: String;
 begin
-  DirDebuild :=ConcatPaths([Settings.GetProjectDir, 'DEBUILD']);
+  DirDebuild :=ConcatPaths([Settings.GetProjectPathAbsolute, 'DEBUILD']);
   if DirectoryExists(DirDebuild) then
     DeleteDirectory(DirDebuild, False);
   MkDir(DirDebuild);
@@ -142,7 +141,7 @@ begin
   Tool := TIDEExternalToolOptions.Create;
   Tool.Filename := '/bin/sh';
   Tool.CmdLineParams := 'DEBUILD.sh';
-  Tool.WorkingDirectory := Settings.GetProjectDir;
+  Tool.WorkingDirectory := Settings.GetProjectPathAbsolute;
   Tool.ShowAllOutput := True;
   RunExternalTool(Tool);
   Tool.Free;
