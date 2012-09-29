@@ -5,7 +5,7 @@ unit lazdebianpreview;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, SynEdit, Forms, Controls, Graphics, Dialogs;
+  SysUtils, SynEdit, Forms;
 
 type
 

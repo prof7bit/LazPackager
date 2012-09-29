@@ -5,7 +5,7 @@ unit frmdebianmakepackage;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
+  Forms, StdCtrls;
 
 type
   TPackageType = (debBinary, debSource);
@@ -32,8 +32,7 @@ var
 
 implementation
 uses
-  lazdebiansettings,
-  lazdebianprocess;
+  lazdebiansettings;
 
 {$R *.lfm}
 
@@ -59,16 +58,10 @@ end;
 procedure TFMakePackage.btnCreateClick(Sender: TObject);
 var
   Settings: TSettings;
-  Sign: Boolean;
-  Upload: Boolean;
 begin
   Settings := TSettings.Create;
-  Sign := chkSign.Checked;
-  Upload := chkUpload.Checked;
-  if FTyp = debBinary then
-    StartMakeBinaryPackage(Settings, Sign)
-  else
-    StartMakeSourcePackage(Settings, Sign, Upload);
+  Settings.DoMakePackage(FTyp=debBinary, chkSign.Checked, chkUpload.Checked);
+  // settings will free itself after it is done
 end;
 
 procedure TFMakePackage.SetType(Typ: TPackageType);

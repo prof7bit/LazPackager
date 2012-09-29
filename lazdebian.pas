@@ -8,7 +8,7 @@ interface
 
 uses
   frmDebianOptions, lazdebianmain, lazdebiansettings, lazdebianpreview, 
-  lazdebianprocess, frmdebianmakepackage, LazarusPackageIntf;
+  frmdebianmakepackage, LazarusPackageIntf;
 
 implementation
 

@@ -5,8 +5,8 @@ unit frmDebianOptions;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, SynEdit, SynBeautifier, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, StdCtrls, ExtCtrls, PairSplitter, lazdebiansettings;
+  SynEdit, SynBeautifier, Forms, Graphics,
+  ComCtrls, StdCtrls, ExtCtrls, lazdebiansettings;
 
 type
 

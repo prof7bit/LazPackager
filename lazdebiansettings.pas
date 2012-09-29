@@ -88,8 +88,10 @@ type
     destructor Destroy; override;
     procedure Save;
     procedure Load;
+  private
     procedure SaveValue(Key, Value: String);
     function LoadValue(Key, DefaultValue: String): String;
+  public
     function GetVersion: String;
     function GetDateFormatted: String;
     function GetExecutableFilenameRelative: String;
@@ -102,23 +104,26 @@ type
     function GetDebuildSrcPathAbsolute: String;
     function GetDebuildSrcDebianPathAbsolute: String;
     function FillTemplate(Template: String): String;
-
+  private
     procedure CreateBuildScript(Binary, Sign, Upload: Boolean);
     procedure CreateDebianFiles;
     procedure RunBuildScript(Data: PtrInt);
+    procedure RunBuildScriptAsync;
+  public
+    procedure DoMakePackage(Binary, Sign, Upload: Boolean);
   end;
 
 implementation
 uses
   Classes,
   sysutils,
+  Forms,
   process,
   FileUtil,
   LazIDEIntf,
   MacroIntf,
   //W32VersionInfo,
-  IDEExternToolIntf,
-  ProjectResourcesIntf;
+  IDEExternToolIntf;
 
 
 procedure CreateFile(FullPathName, Contents: String);
@@ -344,6 +349,7 @@ begin
     + 'mkdir debian' + LF
     + 'mv ../control debian/' + LF
     + 'mv ../rules debian/' + LF
+    + 'chmod +x debian/rules' + LF
     + 'mv ../changelog debian/' + LF
     + 'mv ../copyright debian/' + LF
     + 'mv ../compat debian/' + LF
@@ -394,6 +400,19 @@ begin
   Tool.Free;
   Self.Free;
 end;
+
+procedure TSettings.RunBuildScriptAsync;
+begin
+  Application.QueueAsyncCall(@RunBuildScript, 0);
+end;
+
+procedure TSettings.DoMakePackage(Binary, Sign, Upload: Boolean);
+begin
+  CreateDebianFiles;
+  CreateBuildScript(Binary, Sign, Upload);
+  RunBuildScriptAsync;
+end;
+
 
 end.
 
