@@ -16,7 +16,13 @@ const
     + 'cp *.ico ?TEMPFOLDER?' + LF;
 
   DEFAULT_MAKEFILE
-    = '.PHONY : all'+ LF
+    = 'PREFIX = /usr/local'+ LF
+    + LF
+    + '# debuild will set DESTDIR to the fakeroot path and' + LF
+    + '# in the override rules we will change PREFIX to /usr' + LF
+    + 'BINDIR = $(DESTDIR)$(PREFIX)/bin'+ LF
+    + LF
+    + '.PHONY : all'+ LF
     + 'all:'+ LF
     + TAB + 'lazbuild ?PROJECT?'+ LF
     + LF
@@ -28,8 +34,8 @@ const
     + LF
     + '.PHONY : install'+ LF
     + 'install:'+ LF
-    + TAB + 'mkdir -p $(DESTDIR)$(PREFIX)/bin'+ LF
-    + TAB + 'install ?EXECUTABLE? $(DESTDIR)$(PREFIX)/bin/'+ LF;
+    + TAB + 'mkdir -p $(BINDIR)'+ LF
+    + TAB + 'install -s ?EXECUTABLE? $(BINDIR)/'+ LF;
 
   DEFAULT_CONTROL
     = 'Source: ?PACKAGE_NAME?'+ LF
@@ -48,8 +54,16 @@ const
   DEFAULT_RULES
     = '#!/usr/bin/make -f' + LF
     + LF
+    + '# see http://www.debian.org/doc/manuals/maint-guide/dreq.en.html' + LF
+    + LF
+    + 'override_dh_auto_build:' + LF
+	  + TAB + 'dh_auto_build -- PREFIX=/usr' + LF
+    + LF
+    + 'override_dh_auto_install:' + LF
+    + TAB + 'dh_auto_install -- PREFIX=/usr' + LF
+    + LF
     + '%:' + LF
-	  + TAB + 'dh $@' + LF;
+    + TAB + 'dh $@' + LF;
 
   DEFAULT_CHANGELOG
     = '?PACKAGE_NAME? (?FULLVERSION?) ?SERIES?; urgency=low' + LF
@@ -177,7 +191,7 @@ begin
   Maintainer := LoadValue('lazdebian_maintainer', 'John Doe');
   MaintainerEmail := LoadValue('lazdebian_maintainer_email', 'john_doe@example.invalid');
   Series := LoadValue('lazdebian_series', 'precise');
-  PackageName := LoadValue('lazdebian_package_name', 'some-name');
+  PackageName := LoadValue('lazdebian_package_name', 'debian-package-name');
   ExportCommands := LoadValue('lazdebian_export_cmd', DEFAULT_EXPORT);
   PPA := LoadValue('lazdebian_ppa', 'ppa:johndoe/use-your-own');
 
