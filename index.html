@@ -1,5 +1,82 @@
 <html>
 <title>LazDebian</title>
+<style>
+	img {
+		display: block;
+		margin: 1em;
+	}
+</style>
 <body>
+<h1>LazDebian</h1>
+LazDebian is a Lazarus design time package that allows creating
+Debian / Ubuntu Packages from any existing Lazarus project with no
+or only minimal changes to the project and with only a few clicks
+of the mouse. You find it here:
+<a href="https://github.com/prof7bit/lazdebian">https://github.com/prof7bit/lazdebian</a>
+<h1>Creating Debian binary package</h1>
+select "Debian Options..." from the Project menu:
+<img src="img/menuproject.png">
+...and make sure everything is set up correctly,
+you need to provide valid names, email adddresses, description and also
+a license on the "debian/copyright" tab, default template is GPL-2. The
+default templates on the other debian/* tabs should be suitable for
+most projects out of the box. All changes you make to these templates
+and settings will be saved in the project file:
+<img src="img/options.png">
+Now select "Build Debian Binary Package..." from the Run menu:
+<img src="img/menurun.png">
+Optionally sign it (for signing you need a gpg key for your email
+address, the same email address that you entered on the Debian settings dialog)
+<img src="img/createdeb.png">
+and now the package will be built (note that there may be lintian warnings
+at the end of the build, you should carefully inspect them, here we obviously
+did something wrong in our copyright file, it needs to be a special machine
+readable format documented by Debian but since it is flagged only as
+warning (W) and not as error (E) we will continue for now.
+<img src="img/createdebsuccess.png">
+the binary package can be found in the DEBUILD folder in your project,
+its the file with .deb at the end, thats all that is needed to install
+it with dpkg -i:
+<img src="img/createdebfolder.png">
+If we look inside with archive manager we see what folders and files
+it contains:
+<img src="img/createdebarchivemanager.png">
+and we could distribute this package to other computers and install it
+with dpkg -i or with gdebi and it would install its executable file
+into /usr/bin
+<h1>Source package</h1>
+LazDebian can also be used for creating a source package and upload it
+to your Launchpad PPA. Like above make sure all settings are correct,
+especially also the email address needs to correspond to your gpg key
+and the gpg key must be linked to your launchpad account. Also make sure
+you increment the version number if you upload the same package again
+(for example after a failed build and after fixing bugs). Select
+"Publish Debian Source Package..." and then in the next dialog optionally
+click "Sign" and "Upload":
+<img src="img/createsrc.png">
+after building and before upload it will ask for your pasphrase to sign
+the package:
+<img src="img/debsign.png">
+and then it should upload and finish without errors:
+<img src="img/uploadfinished.png">
+Soon after this you will receive a confirmation email from Launchpad:
+<img src="img/emailconfirm.png" style="border: 1px solid black">
+And on Launchpad you will see it start building (or enqueued for building soon):
+<img src="img/launchpadbuildstart.png" style="border: 1px solid black">
+and success:
+<img src="img/buildsuccess.png" style="border: 1px solid black">
+if you have added the repository with apt-add-repoitory and after
+apt-get update you will be able to apt-get install the package soon
+after the build has completed.
+<h1>Problems</h1>
+Unfortunalely Ubuntu still has only Version 0.9.30 of Lazarus and also
+a pretty old FPC 2.4.4 on Precise (2.6 on Quantal). Your Project should
+compile and work locally with these old versions before you attempt to
+upload to launchpad.
+<br><br>
+An alternative would be to make a sophisticated
+makefile that would first download and install current FPC and Lazarus
+on their build server before starting the build of your project but this
+looks like a very hackish idea (but maybe someone might try just for fun).
 </body>
 </html>
