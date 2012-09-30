@@ -52,7 +52,7 @@ var
 
 implementation
 uses
-  lazdebiansettings;
+  lazdebianpackagerdeb;
 
 {$R *.lfm}
 
@@ -77,11 +77,11 @@ end;
 
 procedure TFMakePackage.btnCreateClick(Sender: TObject);
 var
-  Settings: TSettings;
+  Packager: TPackagerDebian;
 begin
-  Settings := TSettings.Create;
-  Settings.DoMakePackage(FTyp=debBinary, chkSign.Checked, chkUpload.Checked);
-  // settings will free itself after it is done
+  Packager := TPackagerDebian.Create;
+  Packager.DoMakePackage(FTyp=debBinary, chkSign.Checked, chkUpload.Checked);
+  // Packager will free itself after it is done
 end;
 
 procedure TFMakePackage.SetType(Typ: TPackageType);

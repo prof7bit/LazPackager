@@ -31,7 +31,7 @@ Web at &lt;http://www.gnu.org/copyleft/gpl.html>. You can also obtain it by
 writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
 330, Boston, MA 02111-1307, USA."/>
     <Version Major="1"/>
-    <Files Count="5">
+    <Files Count="6">
       <Item1>
         <Filename Value="frmdebianoptions.pas"/>
         <UnitName Value="frmDebianOptions"/>
@@ -42,8 +42,8 @@ writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
         <UnitName Value="lazdebianmain"/>
       </Item2>
       <Item3>
-        <Filename Value="lazdebiansettings.pas"/>
-        <UnitName Value="lazdebiansettings"/>
+        <Filename Value="lazdebianpackagerbase.pas"/>
+        <UnitName Value="lazdebianpackagerbase"/>
       </Item3>
       <Item4>
         <Filename Value="lazdebianpreview.pas"/>
@@ -53,6 +53,10 @@ writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
         <Filename Value="frmdebianmakepackage.pas"/>
         <UnitName Value="frmdebianmakepackage"/>
       </Item5>
+      <Item6>
+        <Filename Value="lazdebianpackagerdeb.pas"/>
+        <UnitName Value="lazdebianpackagerdeb"/>
+      </Item6>
     </Files>
     <Type Value="DesignTime"/>
     <RequiredPkgs Count="4">

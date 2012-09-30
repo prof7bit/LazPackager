@@ -26,7 +26,9 @@ interface
 
 uses
   SynEdit, SynBeautifier, Forms, Graphics,
-  ComCtrls, StdCtrls, ExtCtrls, lazdebiansettings;
+  ComCtrls, StdCtrls, ExtCtrls,
+  lazdebianpackagerbase,
+  lazdebianpackagerdeb;
 
 type
 
@@ -102,7 +104,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure MakefileOptionsSelectionChanged(Sender: TObject);
   private
-    Settings: TSettings;
+    Packager: TPackagerDebian;
   end;
 
 var
@@ -130,8 +132,8 @@ procedure TFDebianOptions.FormCreate(Sender: TObject);
 begin
   TabCtrl.ActivePage := PageOptions;
   InitSynEdits;
-  Settings := TSettings.Create;
-  with Settings do begin
+  Packager := TPackagerDebian.Create;
+  with Packager do begin
     txtCopyright.Text := AuthorCopyright;
     txtVersion.Text := GetVersion;
     txtDescription.Text := Description;
@@ -220,7 +222,7 @@ begin
   //txtExportCommands.Text := ExportCommands;
   //txtPPA.Text := PPA;
 
-  with Settings do begin
+  with Packager do begin
     AuthorCopyright := txtCopyright.Text;
     Description := txtDescription.Text;
     DescriptionLong := txtDescriptionLong.Text;
@@ -246,13 +248,13 @@ procedure TFDebianOptions.ShowPreview(Title, Template: String);
 begin
   UpdateSettings(False);
   FFilePreview := TFFilePreview.Create(Self);
-  FFilePreview.SetText(Title, Settings.FillTemplate(Template));
+  FFilePreview.SetText(Title, Packager.FillTemplate(Template));
   FFilePreview.ShowModal;
 end;
 
 procedure TFDebianOptions.FormDestroy(Sender: TObject);
 begin
-  Settings.Free;
+  Packager.Free;
 end;
 
 procedure TFDebianOptions.FormResize(Sender: TObject);

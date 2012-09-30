@@ -1,0 +1,256 @@
+{ LazDebian packager for debian packages.
+
+  Copyright (C) 2012 Bernd Kreuss prof7bit@gmail.com
+
+  This source is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version.
+
+  This code is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+  for more details.
+
+  A copy of the GNU General Public License is available on the World Wide
+  Web at <http://www.gnu.org/copyleft/gpl.html>. You can also obtain it by
+  writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
+  330, Boston, MA 02111-1307, USA.
+}
+
+unit lazdebianpackagerdeb;
+
+{$mode objfpc}{$H+}
+
+interface
+uses
+  lazdebianpackagerbase;
+
+const
+  DEFAULT_CONTROL
+    = 'Source: ?PACKAGE_NAME?'+ LF
+    + 'Maintainer: ?MAINTAINER? <?MAINTAINER_EMAIL?>'+ LF
+    + 'Section: misc'+ LF
+    + 'Priority: optional'+ LF
+    + 'Standards-Version: 3.9.3'+ LF
+    + 'Build-Depends: fpc, lcl, lcl-utils, lazarus, debhelper (>= 8)'+ LF
+    + LF
+    + 'Package: ?PACKAGE_NAME?'+ LF
+    + 'Architecture: any'+ LF
+    + 'Depends: ${shlibs:Depends}, ${misc:Depends},'+ LF
+    + 'Description: ?DESCRIPTION?'+ LF
+    + ' ?DESCRIPTION_LONG?'+ LF
+    ;
+
+  DEFAULT_RULES
+    = '#!/usr/bin/make -f' + LF
+    + LF
+    + '# see http://www.debian.org/doc/manuals/maint-guide/dreq.en.html' + LF
+    + LF
+    + 'override_dh_auto_build:' + LF
+    + TAB + 'dh_auto_build -- PREFIX=/usr' + LF
+    + LF
+    + 'override_dh_auto_install:' + LF
+    + TAB + 'dh_auto_install -- PREFIX=/usr' + LF
+    + LF
+    + '%:' + LF
+    + TAB + 'dh $@' + LF
+    ;
+
+  DEFAULT_CHANGELOG
+    = '?PACKAGE_NAME? (?FULLVERSION?) ?SERIES?; urgency=low' + LF
+    + LF
+    + '  * Original version ?VERSION? packaged with lazdebian' + LF
+    + LF
+    + ' -- ?MAINTAINER? <?MAINTAINER_EMAIL?>  ?DATE?' + LF
+    ;
+
+  DEFAULT_COPYRIGHT
+    = 'Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/' + LF
+    + LF
+    + 'Files: *' + LF
+    + 'Copyright: ?COPYRIGHT?' + LF
+    + 'License: GPL-2+' + LF
+    + ' This program is free software; you can redistribute it and/or modify' + LF
+    + ' it under the terms of the GNU General Public License as published by' + LF
+    + ' the Free Software Foundation; either version 2 of the License, or' + LF
+    + ' at your option) any later version.' + LF
+    + ' .' + LF
+    + ' This program is distributed in the hope that it will be useful,' + LF
+    + ' but WITHOUT ANY WARRANTY; without even the implied warranty of' + LF
+    + ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the' + LF
+    + ' GNU General Public License for more details.' + LF
+    + ' .' + LF
+    + ' You should have received a copy of the GNU General Public License along' + LF
+    + ' with this program; if not, write to the Free Software Foundation, Inc.,' + LF
+    + ' 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.' + LF
+    + ' .' + LF
+    + ' On Debian systems, the full text of the GNU General Public' + LF
+    + ' License version 2 can be found in the file' + LF
+    + ' /usr/share/common-licenses/GPL-2' + LF
+    ;
+
+type
+  { TPackagerDebian adds some debian specific methods to the
+    packager base class and also a few more debian related
+    templates and settings, creates the debian files and creates
+    and runs DEBUILD.sh build script to build the package.}
+  TPackagerDebian = class(TPackagerBase)
+    Control: String;
+    Rules: String;
+    Changelog: String;
+    Copyright: String;
+    Series: String;  // "precise", "quantal", etc.
+    PPA: String;
+  protected
+    procedure CreateBuildScript(Binary, Sign, Upload: Boolean);
+    procedure CreateDebianFiles;
+  public
+    procedure Save; override;
+    procedure Load; override;
+    function GetBuildScriptName: String; override;
+    function GetDebuildPathAbsolute: String;
+    function GetDebuildSrcPathAbsolute: String;
+    function GetDebuildSrcDebianPathAbsolute: String;
+    function FillTemplate(Template: String): String; override;
+    procedure DoMakePackage(Binary, Sign, Upload: Boolean); override;
+  end;
+
+
+implementation
+uses
+  sysutils,
+  FileUtil;
+
+{ TPackagerDebian }
+
+procedure TPackagerDebian.Save;
+begin
+  inherited Save;
+  SaveValue('lazdebian_series', Series);
+  SaveValue('lazdebian_ppa', PPA);
+
+  SaveValue('lazdebian_tpl_control', Control);
+  SaveValue('lazdebian_tpl_rules', Rules);
+  SaveValue('lazdebian_tpl_changelog', Changelog);
+  SaveValue('lazdebian_tpl_copyright', Copyright);
+end;
+
+procedure TPackagerDebian.Load;
+begin
+  inherited Load;
+  Series := LoadValue('lazdebian_series', 'precise');
+  PPA := LoadValue('lazdebian_ppa', 'ppa:johndoe/use-your-own');
+
+  Control := LoadValue('lazdebian_tpl_control', DEFAULT_CONTROL);
+  Rules := LoadValue('lazdebian_tpl_rules', DEFAULT_RULES);
+  Changelog := LoadValue('lazdebian_tpl_changelog', DEFAULT_CHANGELOG);
+  Copyright := LoadValue('lazdebian_tpl_copyright', DEFAULT_COPYRIGHT);
+end;
+
+function TPackagerDebian.GetBuildScriptName: String;
+begin
+  Result := 'DEBUILD.sh';
+end;
+
+function TPackagerDebian.GetDebuildPathAbsolute: String;
+begin
+  Result := ConcatPaths([GetProjectPathAbsolute, 'DEBUILD']);
+end;
+
+function TPackagerDebian.GetDebuildSrcPathAbsolute: String;
+begin
+  Result := ConcatPaths([GetDebuildPathAbsolute, GetOrigFolderNameOnly]);
+end;
+
+function TPackagerDebian.GetDebuildSrcDebianPathAbsolute: String;
+begin
+  Result := ConcatPaths([GetDebuildSrcPathAbsolute, 'debian']);
+end;
+
+procedure TPackagerDebian.CreateBuildScript(Binary, Sign, Upload: Boolean);
+var
+  S: String;
+  SName: String;
+  DEBUILD: STRING;
+begin
+  s := '#!/bin/sh' + LF
+    + LF
+    + 'set -v' + LF
+    + 'set -e' + LF
+    + Format('cd "%s"', [GetProjectPathAbsolute]) + LF
+    + Format('mkdir -p %s', [GetTempPathAbsolute]) + LF
+    + FillTemplate(ExportCommands) + LF
+    + LF
+    + Format('cd %s', [GetTempPathAbsolute]) + LF
+    + 'rm -rf DEBUILD' + LF
+    + 'rm -f DEBUILD.sh' + LF
+    + LF
+    + 'cd ..' + LF
+    + Format('tar czf %s %s', [GetOrigTarNameOnly, GetOrigFolderNameOnly]) + LF
+    + Format('mv %s "%s"', [GetOrigFolderNameOnly, GetDebuildPathAbsolute]) + LF
+    + Format('mv %s "%s"', [GetOrigTarNameOnly, GetDebuildPathAbsolute]) + LF
+    + LF
+    + Format('cd "%s"', [GetDebuildSrcPathAbsolute]) + LF
+    + 'mkdir -p debian/source' + LF
+    + 'echo "1.0" > debian/source/format' + LF
+    + 'echo "8" > debian/compat' + LF
+    + 'mv ../control debian/' + LF
+    + 'mv ../rules debian/' + LF
+    + 'chmod +x debian/rules' + LF
+    + 'mv ../changelog debian/' + LF
+    + 'mv ../copyright debian/' + LF
+    + 'mv ../Makefile ./' + LF
+    + LF;
+
+  if Binary then
+    S += 'debuild -d -us -uc' + LF
+  else
+    S += 'debuild -S -us -uc' + LF;
+
+  if Sign then begin
+    S += 'cd ..' + LF;
+    S += 'xterm -e "debsign *.changes"' + LF;
+  end;
+
+  if Upload then begin
+    S += Format('dput %s *.changes', [PPA]) + LF;
+  end;
+
+  SName := ConcatPaths([GetProjectPathAbsolute, 'DEBUILD.sh']);
+  CreateFile(SName, S);
+end;
+
+procedure TPackagerDebian.CreateDebianFiles;
+var
+  DirDebuild: String;
+begin
+  DirDebuild := GetDebuildPathAbsolute;
+  if DirectoryExists(DirDebuild) then
+    DeleteDirectory(DirDebuild, False);
+  MkDir(DirDebuild);
+  CreateFile(ConcatPaths([DirDebuild, 'control']), FillTemplate(Control));
+  CreateFile(ConcatPaths([DirDebuild, 'rules']), FillTemplate(Rules));
+  CreateFile(ConcatPaths([DirDebuild, 'changelog']), FillTemplate(Changelog));
+  CreateFile(ConcatPaths([DirDebuild, 'copyright']), FillTemplate(Copyright));
+  {$warning FIXME: respect the setting "Makefile / Use Existing", implement this!}
+  CreateFile(ConcatPaths([DirDebuild, 'Makefile']), FillTemplate(Makefile));
+end;
+
+function TPackagerDebian.FillTemplate(Template: String): String;
+begin
+  Result := inherited FillTemplate(Template);
+  ReplaceMany(Result, ['?SERIES?',            Series
+                      ,'?FULLVERSION?',       GetVersion + '-1'
+                      ]);
+end;
+
+procedure TPackagerDebian.DoMakePackage(Binary, Sign, Upload: Boolean);
+begin
+  CreateDebianFiles;
+  CreateBuildScript(Binary, Sign, Upload);
+  RunBuildScriptAsync;
+end;
+
+end.
+
