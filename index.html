@@ -1,5 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>LazDebian</title>
+<html><head>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"><title>LazDebian</title>
+
 
 <style>
 img {
@@ -16,32 +19,32 @@ of the mouse. You find it here:
 <a href="https://github.com/prof7bit/lazdebian">https://github.com/prof7bit/lazdebian</a>
 <h1>Creating Debian binary package</h1>
 select "Debian Options..." from the Project menu:
-<img src="img/menuproject.png">
+<img style="width: 311px; height: 426px;" alt="screenshot menu &quot;build deb options&quot;" src="img/menuproject.png">
 ...and make sure everything is set up correctly,
 you need to provide valid names, email adddresses, description and also
 a license on the "debian/copyright" tab, default template is GPL-2. The
 default templates on the other debian/* tabs should be suitable for
 most projects out of the box. All changes you make to these templates
 and settings will be saved in the project file:
-<img src="img/options.png">
+<img style="width: 925px; height: 575px;" alt="screenshot settings dialog" src="img/options.png">
 Now select "Build Debian Binary Package..." from the Run menu:
-<img src="img/menurun.png">
+<img style="width: 255px; height: 540px;" alt="screenshot build deb package" src="img/menurun.png">
 Optionally sign it (for signing you need a gpg key for your email
 address, the same email address that you entered on the Debian settings dialog)
-<img src="img/createdeb.png">
+<img style="width: 288px; height: 145px;" alt="screenshot build deb" src="img/createdeb.png">
 and now the package will be built (note that there may be lintian warnings
 at the end of the build, you should carefully inspect them, here we obviously
 did something wrong in our copyright file, it needs to be a special machine
 readable format documented by Debian but since it is flagged only as
 warning (W) and not as error (E) we will continue for now.
-<img src="img/createdebsuccess.png">
+<img style="width: 646px; height: 533px;" alt="screenshot messages window" src="img/createdebsuccess.png">
 the binary package can be found in the DEBUILD folder in your project,
 its the file with .deb at the end, thats all that is needed to install
 it with dpkg -i:
-<img src="img/createdebfolder.png">
+<img style="width: 604px; height: 250px;" alt="screenshot file manager" src="img/createdebfolder.png">
 If we look inside with archive manager we see what folders and files
 it contains:
-<img src="img/createdebarchivemanager.png">
+<img style="width: 617px; height: 367px;" alt="screenshot inside of package with archive manager" src="img/createdebarchivemanager.png">
 and we could distribute this package to other computers and install it
 with dpkg -i or with gdebi and it would install its executable file
 into /usr/bin
@@ -54,18 +57,18 @@ you increment the version number if you upload the same package again
 (for example after a failed build and after fixing bugs). Select
 "Publish Debian Source Package..." and then in the next dialog optionally
 click "Sign" and "Upload":
-<img src="img/createsrc.png">
+<img style="width: 288px; height: 145px;" alt="screenshot create src package" src="img/createsrc.png">
 after building and before upload it will ask for your pasphrase to sign
 the package:
-<img src="img/debsign.png">
+<img style="width: 1024px; height: 768px;" alt="screenshot sign package" src="img/debsign.png">
 and then it should upload and finish without errors:
-<img src="img/uploadfinished.png">
+<img style="width: 614px; height: 542px;" alt="screenshot messages window, src package complete" src="img/uploadfinished.png">
 Soon after this you will receive a confirmation email from Launchpad:
-<img src="img/emailconfirm.png" style="border: 1px solid black;">
+<img alt="screenshot incoming mail from launchpad" src="img/emailconfirm.png" style="border: 1px solid ; width: 608px; height: 323px;">
 And on Launchpad you will see it start building (or enqueued for building soon):
-<img src="img/launchpadbuildstart.png" style="border: 1px solid black;">
+<img alt="screenshot launchpad building" src="img/launchpadbuildstart.png" style="border: 1px solid black;">
 and success:
-<img src="img/buildsuccess.png" style="border: 1px solid black;">
+<img alt="screenshot launchpad build complete" src="img/buildsuccess.png" style="border: 1px solid ; width: 350px; height: 453px;">
 if you have added the repository with apt-add-repository and after
 apt-get update you will be able to apt-get install the package soon
 after the build has completed.
