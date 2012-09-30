@@ -72,7 +72,10 @@ after the build has completed.
 Unfortunalely Ubuntu still has only Version 0.9.30 of Lazarus and also
 a pretty old FPC 2.4.4 on Precise (2.6 on Quantal). Your Project should
 compile and work locally with these old versions before you attempt to
-upload to launchpad.
+upload to launchpad (my example project from above did compile but does
+not run because I made it with Lazarus 1.0 and used properties in my lfm
+file that did not yet exist in older LCL, just in case anybody who i reading
+this tries to install from this PPA now).
 <br><br>
 An alternative would be to make a sophisticated
 makefile that would first download and install current FPC and Lazarus
