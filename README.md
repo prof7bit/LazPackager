@@ -12,6 +12,8 @@ tarball with the umodified original sources along with signed hashes and a
 signed diff that adds all the necessary Debian voodoo to allow automated
 building and packaging on their build farm.
 
+see here for some screenshots: 
+[http://prof7bit.github.com/lazdebian/](http://prof7bit.github.com/lazdebian/)
 
 How does it work?
 -----------------
@@ -46,5 +48,7 @@ signature.
 
 Does it work yet?
 -----------------
-Almost. Detection of version number is currently broken, so it is not
-really useful yet.
+95%. Should work for most simple projects out of the box and with
+a few tweaks to the templates for all others too. It does not yet
+work when you have a Makefile and try to use the option "use existing"
+this is not implemented yet.
