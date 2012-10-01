@@ -96,24 +96,24 @@ type
     templates and settings, creates the debian files and creates
     and runs DEBUILD.sh build script to build the package.}
   TPackagerDebian = class(TPackagerBase)
+  public
     Control: String;
     Rules: String;
     Changelog: String;
     Copyright: String;
     Series: String;  // "precise", "quantal", etc.
     PPA: String;
-  protected
-    procedure CreateBuildScript(Binary, Sign, Upload: Boolean);
-    procedure CreateDebianFiles;
-  public
     procedure Save; override;
     procedure Load; override;
+    function FillTemplate(Template: String): String; override;
+    procedure DoMakePackage(Binary, Sign, Upload: Boolean); override;
+  protected
+    procedure CreateDebianBuildScript(Binary, Sign, Upload: Boolean);
+    procedure CreateDebianFiles;
     function GetBuildScriptName: String; override;
     function GetDebuildPathAbsolute: String;
     function GetDebuildSrcPathAbsolute: String;
     function GetDebuildSrcDebianPathAbsolute: String;
-    function FillTemplate(Template: String): String; override;
-    procedure DoMakePackage(Binary, Sign, Upload: Boolean); override;
   end;
 
 
@@ -168,7 +168,7 @@ begin
   Result := ConcatPaths([GetDebuildSrcPathAbsolute, 'debian']);
 end;
 
-procedure TPackagerDebian.CreateBuildScript(Binary, Sign, Upload: Boolean);
+procedure TPackagerDebian.CreateDebianBuildScript(Binary, Sign, Upload: Boolean);
 var
   S: String;
   SName: String;
@@ -241,14 +241,14 @@ function TPackagerDebian.FillTemplate(Template: String): String;
 begin
   Result := inherited FillTemplate(Template);
   ReplaceMany(Result, ['?SERIES?',            Series
-                      ,'?FULLVERSION?',       GetVersion + '-1'
+                      ,'?FULLVERSION?',       GetOriginalProjectVersion + '-1'
                       ]);
 end;
 
 procedure TPackagerDebian.DoMakePackage(Binary, Sign, Upload: Boolean);
 begin
   CreateDebianFiles;
-  CreateBuildScript(Binary, Sign, Upload);
+  CreateDebianBuildScript(Binary, Sign, Upload);
   RunBuildScriptAsync;
 end;
 

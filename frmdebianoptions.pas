@@ -135,7 +135,7 @@ begin
   Packager := TPackagerDebian.Create;
   with Packager do begin
     txtCopyright.Text := AuthorCopyright;
-    txtVersion.Text := GetVersion;
+    txtVersion.Text := GetOriginalProjectVersion;
     txtDescription.Text := Description;
     txtDescriptionLong.Text := DescriptionLong;
     txtMaintainerName.Text := Maintainer;

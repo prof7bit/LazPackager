@@ -69,6 +69,7 @@ type
     create a shell script from all this information and run it.
     See TPackagerDebian for an example }
   TPackagerBase = class
+  public
     AuthorCopyright: String;
     Description: String;
     DescriptionLong: String;
@@ -79,16 +80,17 @@ type
     Makefile: String;
     constructor Create;
     destructor Destroy; override;
+    procedure Save; virtual;
+    procedure Load; virtual;
+    function GetOriginalProjectVersion: String;
+    function FillTemplate(Template: String): String; virtual;
+    procedure DoMakePackage(Binary, Sign, Upload: Boolean); virtual; abstract;
   protected
     procedure SaveValue(Key, Value: String);
     function LoadValue(Key, DefaultValue: String): String;
     function GetBuildScriptName: String; virtual; abstract;
     procedure RunBuildScript(Data: PtrInt);
     procedure RunBuildScriptAsync;
-  public
-    procedure Save; virtual;
-    procedure Load; virtual;
-    function GetVersion: String;
     function GetDateFormatted: String;
     function GetExecutableFilenameRelative: String;
     function GetProjectFilenameRelative: String;
@@ -96,8 +98,6 @@ type
     function GetTempPathAbsolute: String;
     function GetOrigTarNameOnly: String;
     function GetProjectPathAbsolute: String;
-    function FillTemplate(Template: String): String; virtual;
-    procedure DoMakePackage(Binary, Sign, Upload: Boolean); virtual; abstract;
   end;
 
 procedure CreateFile(FullPathName, Contents: String);
@@ -240,7 +240,7 @@ begin
   Makefile := LoadValue('lazdebian_tpl_makefile', DEFAULT_MAKEFILE);
 end;
 
-function TPackagerBase.GetVersion: String;
+function TPackagerBase.GetOriginalProjectVersion: String;
 var
   ResList: TAbstractProjectResources;
   Resource: TAbstractProjectResource;
@@ -306,7 +306,7 @@ end;
 
 function TPackagerBase.GetOrigFolderNameOnly: String;
 begin
-  Result := Format('%s-%s', [PackageName, GetVersion]);
+  Result := Format('%s-%s', [PackageName, GetOriginalProjectVersion]);
 end;
 
 function TPackagerBase.GetTempPathAbsolute: String;
@@ -316,7 +316,7 @@ end;
 
 function TPackagerBase.GetOrigTarNameOnly: String;
 begin
-  Result := Format('%s_%s.orig.tar.gz', [PackageName, GetVersion]);
+  Result := Format('%s_%s.orig.tar.gz', [PackageName, GetOriginalProjectVersion]);
 end;
 
 function TPackagerBase.GetProjectPathAbsolute: String;
@@ -335,7 +335,7 @@ begin
                         ,'?MAINTAINER?',        Maintainer
                         ,'?MAINTAINER_EMAIL?',  MaintainerEmail
                         ,'?PACKAGE_NAME?',      PackageName
-                        ,'?VERSION?',           GetVersion
+                        ,'?VERSION?',           GetOriginalProjectVersion
                         ,'?DATE?',              GetDateFormatted
                         ,'?EXECUTABLE?',        GetExecutableFilenameRelative
                         ,'?PROJECT?',           GetProjectFilenameRelative
