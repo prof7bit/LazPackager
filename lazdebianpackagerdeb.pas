@@ -62,7 +62,7 @@ const
     + LF
     + '  * Original version ?VERSION? packaged with lazdebian' + LF
     + LF
-    + ' -- ?MAINTAINER? <?MAINTAINER_EMAIL?>  ?DATE?' + LF
+    + ' -- ?MAINTAINER? <?MAINTAINER_EMAIL?>  ?DATER?' + LF
     ;
 
   DEFAULT_COPYRIGHT
@@ -111,6 +111,7 @@ type
     procedure CreateDebianBuildScript(Binary, Sign, Upload: Boolean);
     procedure CreateDebianFiles;
     function GetBuildScriptName: String; override;
+    function GetDateRFC2822: String;
     function GetDebuildPathAbsolute: String;
     function GetDebuildSrcPathAbsolute: String;
     function GetDebuildSrcDebianPathAbsolute: String;
@@ -120,6 +121,7 @@ type
 implementation
 uses
   sysutils,
+  process,
   FileUtil;
 
 { TPackagerDebian }
@@ -153,6 +155,7 @@ begin
   Result := inherited FillTemplate(Template);
   ReplaceMany(Result, ['?SERIES?',            Series
                       ,'?FULLVERSION?',       GetOriginalProjectVersion + '-1'
+                      ,'?DATER?',             GetDateRFC2822
                       ]);
 end;
 
@@ -235,6 +238,29 @@ end;
 function TPackagerDebian.GetBuildScriptName: String;
 begin
   Result := 'DEBUILD.sh';
+end;
+
+function TPackagerDebian.GetDateRFC2822: String;
+var
+  P: TProcess;
+  N: Integer;
+begin
+  P := TProcess.Create(nil);
+  P.Executable := 'date';
+  P.Parameters.Add('-R');
+  P.Options := [poUsePipes, poWaitOnExit];
+  try
+    P.Execute;
+    SetLength(Result, 31);
+    // needs to look like this; "Thu, 27 Sep 2012 19:19:14 +0200"
+    // exactly 31 characters long, no more, no less.
+    N := P.Output.Read(Result[1], 31);
+    if N < 31 then
+      Result := '### date -R gave wrong data ###';
+  except
+    Result := '#### error calling date -R ####';
+  end;
+  P.Free;
 end;
 
 function TPackagerDebian.GetDebuildPathAbsolute: String;

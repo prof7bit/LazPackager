@@ -93,7 +93,6 @@ type
     function GetBuildScriptInterpreter: String; virtual;
     procedure RunBuildScript(Data: PtrInt);
     procedure RunBuildScriptAsync;
-    function GetDateFormatted: String;
     function GetExecutableFilenameRelative: String;
     function GetProjectFilenameRelative: String;
     function GetOrigFolderNameOnly: String;
@@ -110,7 +109,6 @@ uses
   Classes,
   sysutils,
   Forms,
-  process,
   FileUtil,
   LazIDEIntf,
   ProjectResourcesIntf,
@@ -247,7 +245,6 @@ begin
                         ,'?MAINTAINER_EMAIL?',  MaintainerEmail
                         ,'?PACKAGE_NAME?',      PackageName
                         ,'?VERSION?',           GetOriginalProjectVersion
-                        ,'?DATE?',              GetDateFormatted
                         ,'?EXECUTABLE?',        GetExecutableFilenameRelative
                         ,'?PROJECT?',           GetProjectFilenameRelative
                         ,'?TEMPFOLDER?',        GetTempPathAbsolute
@@ -304,29 +301,6 @@ end;
 procedure TPackagerBase.RunBuildScriptAsync;
 begin
   Application.QueueAsyncCall(@Self.RunBuildScript, 0);
-end;
-
-function TPackagerBase.GetDateFormatted: String;
-var
-  P: TProcess;
-  N: Integer;
-begin
-  P := TProcess.Create(nil);
-  P.Executable := 'date';
-  P.Parameters.Add('-R');
-  P.Options := [poUsePipes, poWaitOnExit];
-  try
-    P.Execute;
-    SetLength(Result, 31);
-    // needs to look like this; "Thu, 27 Sep 2012 19:19:14 +0200"
-    // exactly 31 characters long, no more, no less.
-    N := P.Output.Read(Result[1], 31);
-    if N < 31 then
-      Result := '### date -R gave wrong data ###';
-  except
-    Result := '#### error calling date -R ####';
-  end;
-  P.Free;
 end;
 
 function TPackagerBase.GetExecutableFilenameRelative: String;
