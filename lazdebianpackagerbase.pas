@@ -30,11 +30,11 @@ const
   LF = #10;
 
   DEFAULT_EXPORT
-    = 'cp *.lpi ?TEMPFOLDER?' + LF
-    + 'cp *.lpr ?TEMPFOLDER?' + LF
-    + 'cp *.pas ?TEMPFOLDER?' + LF
-    + 'cp *.lfm ?TEMPFOLDER?' + LF
-    + 'cp *.ico ?TEMPFOLDER?' + LF
+    = '?CP? *.lpi ?TEMPFOLDER?/' + LF
+    + '?CP? *.lpr ?TEMPFOLDER?/' + LF
+    + '?CP? *.pas ?TEMPFOLDER?/' + LF
+    + '?CP? *.lfm ?TEMPFOLDER?/' + LF
+    + '?CP? *.ico ?TEMPFOLDER?/' + LF
     ;
 
   DEFAULT_MAKEFILE
@@ -88,7 +88,9 @@ type
   protected
     procedure SaveValue(Key, Value: String);
     function LoadValue(Key, DefaultValue: String): String;
+    function GetCopyCommand: String;
     function GetBuildScriptName: String; virtual; abstract;
+    function GetBuildScriptInterpreter: String; virtual;
     procedure RunBuildScript(Data: PtrInt);
     procedure RunBuildScriptAsync;
     function GetDateFormatted: String;
@@ -249,6 +251,7 @@ begin
                         ,'?EXECUTABLE?',        GetExecutableFilenameRelative
                         ,'?PROJECT?',           GetProjectFilenameRelative
                         ,'?TEMPFOLDER?',        GetTempPathAbsolute
+                        ,'?CP?',                GetCopyCommand
                         ]);
   Result := Template;
 end;
@@ -268,12 +271,28 @@ begin
   end;
 end;
 
+function TPackagerBase.GetCopyCommand: String;
+begin
+  {$ifdef windows}
+  Result := '$(Make)';
+  IDEMacros.SubstituteMacros(Result);
+  Result := ConcatPaths([ExtractFilePath(Result), 'cp.exe']);
+  {$else}
+  Result := 'cp';
+  {$endif}
+end;
+
+function TPackagerBase.GetBuildScriptInterpreter: String;
+begin
+  Result := '/bin/sh';
+end;
+
 procedure TPackagerBase.RunBuildScript(Data: PtrInt);
 var
   Tool: TIDEExternalToolOptions;
 begin
   Tool := TIDEExternalToolOptions.Create;
-  Tool.Filename := '/bin/sh';
+  Tool.Filename := GetBuildScriptInterpreter;
   Tool.CmdLineParams := GetBuildScriptName;
   Tool.WorkingDirectory := GetProjectPathAbsolute;
   Tool.ShowAllOutput := True;
