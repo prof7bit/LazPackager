@@ -109,6 +109,7 @@ uses
   Classes,
   sysutils,
   Forms,
+  LCLProc,
   FileUtil,
   LazIDEIntf,
   ProjectResourcesIntf,
@@ -238,6 +239,7 @@ var
   Version: String;
 
 begin
+  Template := ConvertLineEndings(Template);
   ReplaceMany(Template, ['?COPYRIGHT?',         AuthorCopyright
                         ,'?DESCRIPTION?',       Description
                         ,'?DESCRIPTION_LONG?',  DescriptionLong
