@@ -180,40 +180,6 @@ begin
   inherited Destroy;
 end;
 
-procedure TPackagerBase.SaveValue(Key, Value: String);
-begin
-  LazarusIDE.ActiveProject.CustomData.Values[Key] := Value;
-  LazarusIDE.ActiveProject.Modified := True;
-end;
-
-function TPackagerBase.LoadValue(Key, DefaultValue: String): String;
-begin
-  Result := LazarusIDE.ActiveProject.CustomData.Values[Key];
-  if Result = '' then begin
-    Result := DefaultValue;
-    SaveValue(Key, Result);
-  end;
-end;
-
-procedure TPackagerBase.RunBuildScript(Data: PtrInt);
-var
-  Tool: TIDEExternalToolOptions;
-begin
-  Tool := TIDEExternalToolOptions.Create;
-  Tool.Filename := '/bin/sh';
-  Tool.CmdLineParams := GetBuildScriptName;
-  Tool.WorkingDirectory := GetProjectPathAbsolute;
-  Tool.ShowAllOutput := True;
-  RunExternalTool(Tool);
-  Tool.Free;
-  Self.Free;
-end;
-
-procedure TPackagerBase.RunBuildScriptAsync;
-begin
-  Application.QueueAsyncCall(@Self.RunBuildScript, 0);
-end;
-
 procedure TPackagerBase.Save;
 begin
   SaveValue('lazdebian_copyright', AuthorCopyright);
@@ -265,6 +231,60 @@ begin
       break;
     end;
   end;
+end;
+
+function TPackagerBase.FillTemplate(Template: String): String;
+var
+  Version: String;
+
+begin
+  ReplaceMany(Template, ['?COPYRIGHT?',         AuthorCopyright
+                        ,'?DESCRIPTION?',       Description
+                        ,'?DESCRIPTION_LONG?',  DescriptionLong
+                        ,'?MAINTAINER?',        Maintainer
+                        ,'?MAINTAINER_EMAIL?',  MaintainerEmail
+                        ,'?PACKAGE_NAME?',      PackageName
+                        ,'?VERSION?',           GetOriginalProjectVersion
+                        ,'?DATE?',              GetDateFormatted
+                        ,'?EXECUTABLE?',        GetExecutableFilenameRelative
+                        ,'?PROJECT?',           GetProjectFilenameRelative
+                        ,'?TEMPFOLDER?',        GetTempPathAbsolute
+                        ]);
+  Result := Template;
+end;
+
+procedure TPackagerBase.SaveValue(Key, Value: String);
+begin
+  LazarusIDE.ActiveProject.CustomData.Values[Key] := Value;
+  LazarusIDE.ActiveProject.Modified := True;
+end;
+
+function TPackagerBase.LoadValue(Key, DefaultValue: String): String;
+begin
+  Result := LazarusIDE.ActiveProject.CustomData.Values[Key];
+  if Result = '' then begin
+    Result := DefaultValue;
+    SaveValue(Key, Result);
+  end;
+end;
+
+procedure TPackagerBase.RunBuildScript(Data: PtrInt);
+var
+  Tool: TIDEExternalToolOptions;
+begin
+  Tool := TIDEExternalToolOptions.Create;
+  Tool.Filename := '/bin/sh';
+  Tool.CmdLineParams := GetBuildScriptName;
+  Tool.WorkingDirectory := GetProjectPathAbsolute;
+  Tool.ShowAllOutput := True;
+  RunExternalTool(Tool);
+  Tool.Free;
+  Self.Free;
+end;
+
+procedure TPackagerBase.RunBuildScriptAsync;
+begin
+  Application.QueueAsyncCall(@Self.RunBuildScript, 0);
 end;
 
 function TPackagerBase.GetDateFormatted: String;
@@ -322,26 +342,6 @@ end;
 function TPackagerBase.GetProjectPathAbsolute: String;
 begin
   Result := ExtractFileDir(LazarusIDE.ActiveProject.ProjectInfoFile);
-end;
-
-function TPackagerBase.FillTemplate(Template: String): String;
-var
-  Version: String;
-
-begin
-  ReplaceMany(Template, ['?COPYRIGHT?',         AuthorCopyright
-                        ,'?DESCRIPTION?',       Description
-                        ,'?DESCRIPTION_LONG?',  DescriptionLong
-                        ,'?MAINTAINER?',        Maintainer
-                        ,'?MAINTAINER_EMAIL?',  MaintainerEmail
-                        ,'?PACKAGE_NAME?',      PackageName
-                        ,'?VERSION?',           GetOriginalProjectVersion
-                        ,'?DATE?',              GetDateFormatted
-                        ,'?EXECUTABLE?',        GetExecutableFilenameRelative
-                        ,'?PROJECT?',           GetProjectFilenameRelative
-                        ,'?TEMPFOLDER?',        GetTempPathAbsolute
-                        ]);
-  Result := Template;
 end;
 
 

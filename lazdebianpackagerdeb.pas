@@ -148,24 +148,19 @@ begin
   Copyright := LoadValue('lazdebian_tpl_copyright', DEFAULT_COPYRIGHT);
 end;
 
-function TPackagerDebian.GetBuildScriptName: String;
+function TPackagerDebian.FillTemplate(Template: String): String;
 begin
-  Result := 'DEBUILD.sh';
+  Result := inherited FillTemplate(Template);
+  ReplaceMany(Result, ['?SERIES?',            Series
+                      ,'?FULLVERSION?',       GetOriginalProjectVersion + '-1'
+                      ]);
 end;
 
-function TPackagerDebian.GetDebuildPathAbsolute: String;
+procedure TPackagerDebian.DoMakePackage(Binary, Sign, Upload: Boolean);
 begin
-  Result := ConcatPaths([GetProjectPathAbsolute, 'DEBUILD']);
-end;
-
-function TPackagerDebian.GetDebuildSrcPathAbsolute: String;
-begin
-  Result := ConcatPaths([GetDebuildPathAbsolute, GetOrigFolderNameOnly]);
-end;
-
-function TPackagerDebian.GetDebuildSrcDebianPathAbsolute: String;
-begin
-  Result := ConcatPaths([GetDebuildSrcPathAbsolute, 'debian']);
+  CreateDebianFiles;
+  CreateDebianBuildScript(Binary, Sign, Upload);
+  RunBuildScriptAsync;
 end;
 
 procedure TPackagerDebian.CreateDebianBuildScript(Binary, Sign, Upload: Boolean);
@@ -237,19 +232,24 @@ begin
   CreateFile(ConcatPaths([DirDebuild, 'Makefile']), FillTemplate(Makefile));
 end;
 
-function TPackagerDebian.FillTemplate(Template: String): String;
+function TPackagerDebian.GetBuildScriptName: String;
 begin
-  Result := inherited FillTemplate(Template);
-  ReplaceMany(Result, ['?SERIES?',            Series
-                      ,'?FULLVERSION?',       GetOriginalProjectVersion + '-1'
-                      ]);
+  Result := 'DEBUILD.sh';
 end;
 
-procedure TPackagerDebian.DoMakePackage(Binary, Sign, Upload: Boolean);
+function TPackagerDebian.GetDebuildPathAbsolute: String;
 begin
-  CreateDebianFiles;
-  CreateDebianBuildScript(Binary, Sign, Upload);
-  RunBuildScriptAsync;
+  Result := ConcatPaths([GetProjectPathAbsolute, 'DEBUILD']);
+end;
+
+function TPackagerDebian.GetDebuildSrcPathAbsolute: String;
+begin
+  Result := ConcatPaths([GetDebuildPathAbsolute, GetOrigFolderNameOnly]);
+end;
+
+function TPackagerDebian.GetDebuildSrcDebianPathAbsolute: String;
+begin
+  Result := ConcatPaths([GetDebuildSrcPathAbsolute, 'debian']);
 end;
 
 end.
