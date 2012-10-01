@@ -280,6 +280,9 @@ end;
 
 function TPackagerBase.GetBuildScriptInterpreter: String;
 begin
+  // individual packagers may override this, especially a
+  // packager for windows might want to use cmd.exe for
+  // its build script instead of sh.
   Result := '/bin/sh';
 end;
 
