@@ -264,7 +264,6 @@ begin
   Result := LazarusIDE.ActiveProject.CustomData.Values[Key];
   if Result = '' then begin
     Result := DefaultValue;
-    SaveValue(Key, Result);
   end;
 end;
 
