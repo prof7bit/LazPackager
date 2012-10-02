@@ -24,7 +24,7 @@ unit lazdebianpackagerdeb;
 
 interface
 uses
-  lazdebianpackagerbase;
+  LazPackagerBase;
 
 const
   CONFNAME_DEB = CONFNAME_BASE + '/deb';

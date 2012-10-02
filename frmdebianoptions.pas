@@ -27,7 +27,7 @@ interface
 uses
   SynEdit, SynBeautifier, Forms, Graphics,
   ComCtrls, StdCtrls, ExtCtrls,
-  lazdebianpackagerbase,
+  LazPackagerBase,
   lazdebianpackagerdeb;
 
 type

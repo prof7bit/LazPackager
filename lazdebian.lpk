@@ -42,12 +42,12 @@ writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
         <UnitName Value="lazdebianmain"/>
       </Item2>
       <Item3>
-        <Filename Value="lazdebianpackagerbase.pas"/>
-        <UnitName Value="lazdebianpackagerbase"/>
+        <Filename Value="lazpackagerbase.pas"/>
+        <UnitName Value="lazpackagerbase"/>
       </Item3>
       <Item4>
         <Filename Value="frmlazpackagerpreview.pas"/>
-        <UnitName Value="frmlazpackagerpreview"/>
+        <UnitName Value="frmLazPackagerPreview"/>
       </Item4>
       <Item5>
         <Filename Value="frmdebianmakepackage.pas"/>

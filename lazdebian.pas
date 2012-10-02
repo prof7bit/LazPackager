@@ -7,9 +7,8 @@ unit lazdebian;
 interface
 
 uses
-  frmDebianOptions, lazdebianmain, lazdebianpackagerbase, 
-  frmLazPackagerPreview, frmdebianmakepackage, lazdebianpackagerdeb, 
-  LazarusPackageIntf;
+  frmDebianOptions, lazdebianmain, LazPackagerBase, frmLazPackagerPreview, 
+  frmdebianmakepackage, lazdebianpackagerdeb, LazarusPackageIntf;
 
 implementation
 
