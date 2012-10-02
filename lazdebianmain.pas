@@ -31,7 +31,7 @@ uses
   Forms,
   MenuIntf,
   frmDebianOptions,
-  frmdebianmakepackage;
+  frmLazPackagerMakeDeb;
 
 procedure OpenConfigDialog(Sender: TObject);
 begin

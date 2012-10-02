@@ -50,8 +50,8 @@ writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
         <UnitName Value="frmLazPackagerPreview"/>
       </Item4>
       <Item5>
-        <Filename Value="frmdebianmakepackage.pas"/>
-        <UnitName Value="frmdebianmakepackage"/>
+        <Filename Value="frmlazpackagermakedeb.pas"/>
+        <UnitName Value="frmlazpackagermakedeb"/>
       </Item5>
       <Item6>
         <Filename Value="lazpackagerdebian.pas"/>
