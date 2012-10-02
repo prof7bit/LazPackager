@@ -30,7 +30,7 @@ implementation
 uses
   Forms,
   MenuIntf,
-  frmDebianOptions,
+  frmLazPackagerOptionsDeb,
   frmLazPackagerMakeDeb;
 
 procedure OpenConfigDialog(Sender: TObject);

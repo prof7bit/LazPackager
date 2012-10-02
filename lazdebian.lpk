@@ -33,13 +33,13 @@ writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
     <Version Major="1"/>
     <Files Count="6">
       <Item1>
-        <Filename Value="frmdebianoptions.pas"/>
-        <UnitName Value="frmDebianOptions"/>
+        <Filename Value="frmlazpackageroptionsdeb.pas"/>
+        <UnitName Value="frmlazpackageroptionsdeb"/>
       </Item1>
       <Item2>
         <Filename Value="lazpackagermain.pas"/>
         <HasRegisterProc Value="True"/>
-        <UnitName Value="lazpackagermain"/>
+        <UnitName Value="LazPackagerMain"/>
       </Item2>
       <Item3>
         <Filename Value="lazpackagerbase.pas"/>
