@@ -100,7 +100,6 @@ type
     function GetProjectFilenameRelative: String;
     function GetOrigFolderNameOnly: String;
     function GetTempPathAbsolute: String;
-    function GetOrigTarNameOnly: String;
     function GetProjectPathAbsolute: String;
   end;
 
@@ -333,11 +332,6 @@ end;
 function TPackagerBase.GetTempPathAbsolute: String;
 begin
   Result := ConcatPaths([GetTempDir, GetOrigFolderNameOnly]);
-end;
-
-function TPackagerBase.GetOrigTarNameOnly: String;
-begin
-  Result := Format('%s_%s.orig.tar.gz', [PackageName, GetOriginalProjectVersion]);
 end;
 
 function TPackagerBase.GetProjectPathAbsolute: String;

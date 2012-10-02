@@ -114,6 +114,7 @@ type
     procedure CreateDebianFiles;
     function GetBuildScriptName: String; override;
     function GetDateRFC2822: String;
+    function GetOrigTarNameOnly: String;
     function GetDebuildPathAbsolute: String;
     function GetDebuildSrcPathAbsolute: String;
     function GetDebuildSrcDebianPathAbsolute: String;
@@ -268,6 +269,11 @@ begin
     Result := '#### error calling date -R ####';
   end;
   P.Free;
+end;
+
+function TPackagerDebian.GetOrigTarNameOnly: String;
+begin
+  Result := Format('%s_%s.orig.tar.gz', [PackageName, GetOriginalProjectVersion]);
 end;
 
 function TPackagerDebian.GetDebuildPathAbsolute: String;
