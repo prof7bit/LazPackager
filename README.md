@@ -14,7 +14,7 @@ sources along with signed hashes and a signed diff that adds all the necessary
 Debian voodoo to allow automated building and packaging on their build farm.
 
 see here for some screenshots: 
-[http://prof7bit.github.com/lazdebian/](http://prof7bit.github.com/LazPackager/)
+[http://prof7bit.github.com/LazPackager/](http://prof7bit.github.com/LazPackager/)
 
 How does it work?
 -----------------
