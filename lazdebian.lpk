@@ -46,8 +46,8 @@ writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
         <UnitName Value="lazdebianpackagerbase"/>
       </Item3>
       <Item4>
-        <Filename Value="lazdebianpreview.pas"/>
-        <UnitName Value="lazdebianpreview"/>
+        <Filename Value="frmlazpackagerpreview.pas"/>
+        <UnitName Value="frmlazpackagerpreview"/>
       </Item4>
       <Item5>
         <Filename Value="frmdebianmakepackage.pas"/>

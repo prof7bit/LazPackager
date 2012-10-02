@@ -1,4 +1,4 @@
-{ LazDebian preview window for generated files
+{ LazPackager preview window for generated files
 
   Copyright (C) 2012 Bernd Kreuss prof7bit@gmail.com
 
@@ -18,7 +18,7 @@
   330, Boston, MA 02111-1307, USA.
 }
 
-unit lazdebianpreview;
+unit frmLazPackagerPreview;
 
 {$mode objfpc}{$H+}
 

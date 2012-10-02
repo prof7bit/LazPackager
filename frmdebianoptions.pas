@@ -112,7 +112,7 @@ var
 
 implementation
 uses
-  lazdebianpreview;
+  frmLazPackagerPreview;
 
 const
   IDX_MAKE_USE_EXISTING = 0;
