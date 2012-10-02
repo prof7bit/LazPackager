@@ -37,9 +37,9 @@ writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
         <UnitName Value="frmDebianOptions"/>
       </Item1>
       <Item2>
-        <Filename Value="lazdebianmain.pas"/>
+        <Filename Value="lazpackagermain.pas"/>
         <HasRegisterProc Value="True"/>
-        <UnitName Value="lazdebianmain"/>
+        <UnitName Value="lazpackagermain"/>
       </Item2>
       <Item3>
         <Filename Value="lazpackagerbase.pas"/>
@@ -51,11 +51,11 @@ writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
       </Item4>
       <Item5>
         <Filename Value="frmlazpackagermakedeb.pas"/>
-        <UnitName Value="frmlazpackagermakedeb"/>
+        <UnitName Value="frmLazPackagerMakeDeb"/>
       </Item5>
       <Item6>
         <Filename Value="lazpackagerdebian.pas"/>
-        <UnitName Value="lazpackagerdebian"/>
+        <UnitName Value="LazPackagerDebian"/>
       </Item6>
     </Files>
     <Type Value="DesignTime"/>

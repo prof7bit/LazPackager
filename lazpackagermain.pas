@@ -18,7 +18,7 @@
   330, Boston, MA 02111-1307, USA.
 }
 
-unit lazdebianmain;
+unit LazPackagerMain;
 
 {$mode objfpc}{$H+}
 

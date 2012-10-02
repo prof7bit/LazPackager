@@ -7,14 +7,14 @@ unit lazdebian;
 interface
 
 uses
-  frmDebianOptions, lazdebianmain, LazPackagerBase, frmLazPackagerPreview, 
+  frmDebianOptions, LazPackagerMain, LazPackagerBase, frmLazPackagerPreview, 
   frmLazPackagerMakeDeb, LazPackagerDebian, LazarusPackageIntf;
 
 implementation
 
 procedure Register;
 begin
-  RegisterUnit('lazdebianmain', @lazdebianmain.Register);
+  RegisterUnit('LazPackagerMain', @LazPackagerMain.Register);
 end;
 
 initialization
