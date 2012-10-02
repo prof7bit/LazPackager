@@ -43,7 +43,7 @@ writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
       </Item2>
       <Item3>
         <Filename Value="lazpackagerbase.pas"/>
-        <UnitName Value="lazpackagerbase"/>
+        <UnitName Value="LazPackagerBase"/>
       </Item3>
       <Item4>
         <Filename Value="frmlazpackagerpreview.pas"/>
@@ -54,8 +54,8 @@ writing to the Free Software Foundation, Inc., 59 Temple Place - Suite
         <UnitName Value="frmdebianmakepackage"/>
       </Item5>
       <Item6>
-        <Filename Value="lazdebianpackagerdeb.pas"/>
-        <UnitName Value="lazdebianpackagerdeb"/>
+        <Filename Value="lazpackagerdebian.pas"/>
+        <UnitName Value="lazpackagerdebian"/>
       </Item6>
     </Files>
     <Type Value="DesignTime"/>

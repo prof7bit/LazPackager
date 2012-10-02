@@ -52,7 +52,7 @@ var
 
 implementation
 uses
-  lazdebianpackagerdeb;
+  LazPackagerDebian;
 
 {$R *.lfm}
 

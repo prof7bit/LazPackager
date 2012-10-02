@@ -28,7 +28,7 @@ uses
   SynEdit, SynBeautifier, Forms, Graphics,
   ComCtrls, StdCtrls, ExtCtrls,
   LazPackagerBase,
-  lazdebianpackagerdeb;
+  LazPackagerDebian;
 
 type
 
