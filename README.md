@@ -49,6 +49,4 @@ signature.
 Does it work yet?
 -----------------
 95%. Should work for most simple projects out of the box and with
-a few tweaks to the templates for all others too. It does not yet
-work when you have a Makefile and try to use the option "use existing"
-this is not implemented yet.
+a few tweaks to the templates for all others too.

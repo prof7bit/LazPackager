@@ -198,8 +198,13 @@ begin
     + 'chmod +x debian/rules' + LF
     + 'mv ../changelog debian/' + LF
     + 'mv ../copyright debian/' + LF
-    + 'mv ../Makefile ./' + LF
-    + LF;
+    ;
+
+  if not UseExistingMakefile then begin
+    S += 'mv ../Makefile ./' + LF
+  end;
+
+  S += LF;
 
   if Binary then
     S += 'debuild -d -us -uc' + LF
@@ -231,8 +236,8 @@ begin
   CreateFile(ConcatPaths([DirDebuild, 'rules']), FillTemplate(Rules));
   CreateFile(ConcatPaths([DirDebuild, 'changelog']), FillTemplate(Changelog));
   CreateFile(ConcatPaths([DirDebuild, 'copyright']), FillTemplate(Copyright));
-  {$warning FIXME: respect the setting "Makefile / Use Existing", implement this!}
-  CreateFile(ConcatPaths([DirDebuild, 'Makefile']), FillTemplate(Makefile));
+  if not UseExistingMakefile then
+    CreateFile(ConcatPaths([DirDebuild, 'Makefile']), FillTemplate(Makefile));
 end;
 
 function TPackagerDebian.GetBuildScriptName: String;

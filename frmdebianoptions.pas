@@ -145,6 +145,11 @@ begin
     txtExportCommands.Text := ExportCommands;
     txtPPA.Text := PPA;
 
+    if UseExistingMakefile then
+      MakefileOptions.ItemIndex := IDX_MAKE_USE_EXISTING
+    else
+      MakefileOptions.ItemIndex := IDX_MAKE_FROM_TEMPLATE;
+
     EdMakefile.Text := Makefile;
     EdControl.Text := Control;
     EdRules.Text := Rules;
@@ -212,16 +217,6 @@ end;
 
 procedure TFDebianOptions.UpdateSettings(SaveToProject: Boolean);
 begin
-  //txtCopyright.Text := AuthorCopyright;
-  //txtDescription.Text := License;
-  //txtDescriptionLong.Text := LicenseLong;
-  //txtMaintainerName.Text := Maintainer;
-  //txtMaintainerEmail.Text := MaintainerEmail;
-  //txtSeries.Text := Series;
-  //txtPackageName.Text := PackageName;
-  //txtExportCommands.Text := ExportCommands;
-  //txtPPA.Text := PPA;
-
   with Packager do begin
     AuthorCopyright := txtCopyright.Text;
     Description := txtDescription.Text;
@@ -233,11 +228,17 @@ begin
     ExportCommands := txtExportCommands.Text;
     PPA := txtPPA.Text;
 
+    if MakefileOptions.ItemIndex = IDX_MAKE_USE_EXISTING then
+      UseExistingMakefile := True
+    else
+      UseExistingMakefile := False;
+
     Makefile := EdMakefile.Text;
     Control := EdControl.Text;
     Rules := EdRules.Text;
     Changelog := EdChangelog.Text;
     Copyright := EdCopyright.Text;
+
     if SaveToProject then
       Save;
   end;

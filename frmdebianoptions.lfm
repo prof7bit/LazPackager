@@ -421,7 +421,7 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageMakefile
         AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 430
+        Height = 474
         Top = 10
         Width = 696
         BorderSpacing.Left = 10
@@ -942,7 +942,7 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageControl
         AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 430
+        Height = 474
         Top = 10
         Width = 696
         BorderSpacing.Left = 10
@@ -1463,7 +1463,7 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageRules
         AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 430
+        Height = 474
         Top = 10
         Width = 696
         BorderSpacing.Left = 10
@@ -1984,7 +1984,7 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageChangelog
         AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 430
+        Height = 474
         Top = 10
         Width = 696
         BorderSpacing.Left = 10
@@ -2505,7 +2505,7 @@ object FDebianOptions: TFDebianOptions
         AnchorSideBottom.Control = PageCopyright
         AnchorSideBottom.Side = asrBottom
         Left = 225
-        Height = 430
+        Height = 474
         Top = 10
         Width = 696
         BorderSpacing.Left = 10

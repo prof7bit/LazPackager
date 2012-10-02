@@ -78,6 +78,7 @@ type
     PackageName: String;
     ExportCommands: String;
     Makefile: String;
+    UseExistingMakefile: Boolean;
     constructor Create;
     destructor Destroy; override;
     procedure Save; virtual;
@@ -190,7 +191,7 @@ begin
   SaveValue('lazdebian_maintainer_email', MaintainerEmail);
   SaveValue('lazdebian_package_name', PackageName);
   SaveValue('lazdebian_export_cmd', ExportCommands);
-
+  SaveValue('lazdebian_use_existing_makefile', BoolToStr(UseExistingMakefile, True));
   SaveValue('lazdebian_tpl_makefile', Makefile);
 end;
 
@@ -203,6 +204,7 @@ begin
   MaintainerEmail := LoadValue('lazdebian_maintainer_email', 'john_doe@example.invalid');
   PackageName := LoadValue('lazdebian_package_name', 'debian-package-name');
   ExportCommands := LoadValue('lazdebian_export_cmd', DEFAULT_EXPORT);
+  UseExistingMakefile := StrToBool(LoadValue('lazdebian_use_existing_makefile', 'False'));
 
   Makefile := LoadValue('lazdebian_tpl_makefile', DEFAULT_MAKEFILE);
 end;
