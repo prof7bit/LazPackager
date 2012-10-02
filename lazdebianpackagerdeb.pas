@@ -27,6 +27,8 @@ uses
   lazdebianpackagerbase;
 
 const
+  CONFNAME_DEB = CONFNAME_BASE + '/deb';
+
   DEFAULT_CONTROL
     = 'Source: ?PACKAGE_NAME?'+ LF
     + 'Maintainer: ?MAINTAINER? <?MAINTAINER_EMAIL?>'+ LF
@@ -129,25 +131,25 @@ uses
 procedure TPackagerDebian.Save;
 begin
   inherited Save;
-  SaveValue('lazdebian_series', Series);
-  SaveValue('lazdebian_ppa', PPA);
+  SaveValue(CONFNAME_DEB, 'series', Series);
+  SaveValue(CONFNAME_DEB, 'ppa', PPA);
 
-  SaveValue('lazdebian_tpl_control', Control);
-  SaveValue('lazdebian_tpl_rules', Rules);
-  SaveValue('lazdebian_tpl_changelog', Changelog);
-  SaveValue('lazdebian_tpl_copyright', Copyright);
+  SaveValue(CONFNAME_DEB, 'tpl_control', Control);
+  SaveValue(CONFNAME_DEB, 'tpl_rules', Rules);
+  SaveValue(CONFNAME_DEB, 'tpl_changelog', Changelog);
+  SaveValue(CONFNAME_DEB, 'tpl_copyright', Copyright);
 end;
 
 procedure TPackagerDebian.Load;
 begin
   inherited Load;
-  Series := LoadValue('lazdebian_series', 'precise');
-  PPA := LoadValue('lazdebian_ppa', 'ppa:johndoe/use-your-own');
+  Series := LoadValue(CONFNAME_DEB, 'series', 'precise');
+  PPA := LoadValue(CONFNAME_DEB, 'ppa', 'ppa:johndoe/use-your-own');
 
-  Control := LoadValue('lazdebian_tpl_control', DEFAULT_CONTROL);
-  Rules := LoadValue('lazdebian_tpl_rules', DEFAULT_RULES);
-  Changelog := LoadValue('lazdebian_tpl_changelog', DEFAULT_CHANGELOG);
-  Copyright := LoadValue('lazdebian_tpl_copyright', DEFAULT_COPYRIGHT);
+  Control := LoadValue(CONFNAME_DEB, 'tpl_control', DEFAULT_CONTROL);
+  Rules := LoadValue(CONFNAME_DEB, 'tpl_rules', DEFAULT_RULES);
+  Changelog := LoadValue(CONFNAME_DEB, 'tpl_changelog', DEFAULT_CHANGELOG);
+  Copyright := LoadValue(CONFNAME_DEB, 'tpl_copyright', DEFAULT_COPYRIGHT);
 end;
 
 function TPackagerDebian.FillTemplate(Template: String): String;

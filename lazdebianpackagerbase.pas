@@ -29,6 +29,8 @@ const
   TAB = #9;
   LF = #10;
 
+  CONFNAME_BASE = 'lazpackager';
+
   DEFAULT_EXPORT
     = '?CP? *.lpi ?TEMPFOLDER?/' + LF
     + '?CP? *.lpr ?TEMPFOLDER?/' + LF
@@ -87,8 +89,8 @@ type
     function FillTemplate(Template: String): String; virtual;
     procedure DoMakePackage(Binary, Sign, Upload: Boolean); virtual; abstract;
   protected
-    procedure SaveValue(Key, Value: String);
-    function LoadValue(Key, DefaultValue: String): String;
+    procedure SaveValue(Namespace, Key, Value: String);
+    function LoadValue(Namespace, Key, DefaultValue: String): String;
     function GetCopyCommand: String;
     function GetBuildScriptName: String; virtual; abstract;
     function GetBuildScriptInterpreter: String; virtual;
@@ -184,29 +186,29 @@ end;
 
 procedure TPackagerBase.Save;
 begin
-  SaveValue('lazdebian_copyright', AuthorCopyright);
-  SaveValue('lazdebian_description', Description);
-  SaveValue('lazdebian_description_long', DescriptionLong);
-  SaveValue('lazdebian_maintainer', Maintainer);
-  SaveValue('lazdebian_maintainer_email', MaintainerEmail);
-  SaveValue('lazdebian_package_name', PackageName);
-  SaveValue('lazdebian_export_cmd', ExportCommands);
-  SaveValue('lazdebian_use_existing_makefile', BoolToStr(UseExistingMakefile, True));
-  SaveValue('lazdebian_tpl_makefile', Makefile);
+  SaveValue(CONFNAME_BASE, 'copyright', AuthorCopyright);
+  SaveValue(CONFNAME_BASE, 'description', Description);
+  SaveValue(CONFNAME_BASE, 'description_long', DescriptionLong);
+  SaveValue(CONFNAME_BASE, 'maintainer', Maintainer);
+  SaveValue(CONFNAME_BASE, 'maintainer_email', MaintainerEmail);
+  SaveValue(CONFNAME_BASE, 'package_name', PackageName);
+  SaveValue(CONFNAME_BASE, 'export_cmd', ExportCommands);
+  SaveValue(CONFNAME_BASE, 'use_existing_makefile', BoolToStr(UseExistingMakefile, True));
+  SaveValue(CONFNAME_BASE, 'tpl_makefile', Makefile);
 end;
 
 procedure TPackagerBase.Load;
 begin
-  AuthorCopyright := LoadValue('lazdebian_copyright', '2012 Jane Doe');
-  Description := LoadValue('lazdebian_description', 'this is a program');
-  DescriptionLong := LoadValue('lazdebian_description_long', 'long description may not be empty!');
-  Maintainer := LoadValue('lazdebian_maintainer', 'John Doe');
-  MaintainerEmail := LoadValue('lazdebian_maintainer_email', 'john_doe@example.invalid');
-  PackageName := LoadValue('lazdebian_package_name', 'debian-package-name');
-  ExportCommands := LoadValue('lazdebian_export_cmd', DEFAULT_EXPORT);
-  UseExistingMakefile := StrToBool(LoadValue('lazdebian_use_existing_makefile', 'False'));
+  AuthorCopyright := LoadValue(CONFNAME_BASE, 'copyright', '2012 Jane Doe');
+  Description := LoadValue(CONFNAME_BASE, 'description', 'this is a program');
+  DescriptionLong := LoadValue(CONFNAME_BASE, 'description_long', 'long description may not be empty!');
+  Maintainer := LoadValue(CONFNAME_BASE, 'maintainer', 'John Doe');
+  MaintainerEmail := LoadValue(CONFNAME_BASE, 'maintainer_email', 'john_doe@example.invalid');
+  PackageName := LoadValue(CONFNAME_BASE, 'package_name', 'debian-package-name');
+  ExportCommands := LoadValue(CONFNAME_BASE, 'export_cmd', DEFAULT_EXPORT);
+  UseExistingMakefile := StrToBool(LoadValue(CONFNAME_BASE, 'use_existing_makefile', 'False'));
 
-  Makefile := LoadValue('lazdebian_tpl_makefile', DEFAULT_MAKEFILE);
+  Makefile := LoadValue(CONFNAME_BASE, 'tpl_makefile', DEFAULT_MAKEFILE);
 end;
 
 function TPackagerBase.GetOriginalProjectVersion: String;
@@ -257,15 +259,15 @@ begin
   Result := Template;
 end;
 
-procedure TPackagerBase.SaveValue(Key, Value: String);
+procedure TPackagerBase.SaveValue(Namespace, Key, Value: String);
 begin
-  LazarusIDE.ActiveProject.CustomData.Values[Key] := Value;
+  LazarusIDE.ActiveProject.CustomData.Values[Namespace + '/' + Key] := Value;
   LazarusIDE.ActiveProject.Modified := True;
 end;
 
-function TPackagerBase.LoadValue(Key, DefaultValue: String): String;
+function TPackagerBase.LoadValue(Namespace, Key, DefaultValue: String): String;
 begin
-  Result := LazarusIDE.ActiveProject.CustomData.Values[Key];
+  Result := LazarusIDE.ActiveProject.CustomData.Values[Namespace + '/' + Key];
   if Result = '' then begin
     Result := DefaultValue;
   end;
