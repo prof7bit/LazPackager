@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <CONFIG>
   <Package Version="4">
-    <Name Value="lazdebian"/>
+    <Name Value="LazPackager"/>
     <Author Value="Bernd Kreuss"/>
     <CompilerOptions>
       <Version Value="11"/>

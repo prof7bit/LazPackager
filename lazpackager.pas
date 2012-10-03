@@ -2,7 +2,7 @@
   This source is only used to compile and install the package.
  }
 
-unit lazdebian;
+unit LazPackager;
 
 interface
 
@@ -19,5 +19,5 @@ begin
 end;
 
 initialization
-  RegisterPackage('lazdebian', @Register);
+  RegisterPackage('LazPackager', @Register);
 end.
