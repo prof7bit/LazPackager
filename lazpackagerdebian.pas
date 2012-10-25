@@ -35,7 +35,7 @@ const
     + 'Section: misc'+ LF
     + 'Priority: optional'+ LF
     + 'Standards-Version: 3.9.3'+ LF
-    + 'Build-Depends: fpc, lcl, lcl-utils, lazarus, debhelper (>= 8)'+ LF
+    + 'Build-Depends: fpc, lazarus, lcl, lcl-utils, debhelper (>= 8)'+ LF
     + LF
     + 'Package: ?PACKAGE_NAME?'+ LF
     + 'Architecture: any'+ LF
@@ -49,11 +49,14 @@ const
     + LF
     + '# see http://www.debian.org/doc/manuals/maint-guide/dreq.en.html' + LF
     + LF
+    + 'ROOT = $(CURDIR)/debian/?PACKAGE_NAME?' + LF
+    + LF
     + 'override_dh_auto_build:' + LF
-    + TAB + 'dh_auto_build -- PREFIX=/usr' + LF
+    + TAB + 'lazbuild ?PROJECT?' + LF
     + LF
     + 'override_dh_auto_install:' + LF
-    + TAB + 'dh_auto_install -- PREFIX=/usr' + LF
+    + TAB + 'install -d -m 755 $(ROOT)/usr/bin' + LF
+    + TAB + 'install -s -m 755 ?EXECUTABLE? $(ROOT)/usr/bin' + LF
     + LF
     + '%:' + LF
     + TAB + 'dh $@' + LF
@@ -203,16 +206,10 @@ begin
     + 'mv ../copyright debian/' + LF
     ;
 
-  if not UseExistingMakefile then begin
-    S += 'mv ../Makefile ./' + LF
-  end;
-
-  S += LF;
-
   if Binary then
-    S += 'debuild -d -us -uc' + LF
+    S += 'debuild -us -uc -d -b' + LF
   else
-    S += 'debuild -S -us -uc' + LF;
+    S += 'debuild -us -uc -S' + LF;
 
   if Sign then begin
     S += 'cd ..' + LF;
@@ -239,8 +236,6 @@ begin
   CreateFile(ConcatPaths([DirDebuild, 'rules']), FillTemplate(Rules));
   CreateFile(ConcatPaths([DirDebuild, 'changelog']), FillTemplate(Changelog));
   CreateFile(ConcatPaths([DirDebuild, 'copyright']), FillTemplate(Copyright));
-  if not UseExistingMakefile then
-    CreateFile(ConcatPaths([DirDebuild, 'Makefile']), FillTemplate(Makefile));
 end;
 
 function TPackagerDebian.GetBuildScriptName: String;

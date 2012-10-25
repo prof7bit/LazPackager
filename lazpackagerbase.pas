@@ -39,29 +39,6 @@ const
     + '?CP? *.ico ?TEMPFOLDER?/' + LF
     ;
 
-  DEFAULT_MAKEFILE
-    = 'PREFIX = /usr/local'+ LF
-    + LF
-    + '# debuild will set DESTDIR to the fakeroot path and' + LF
-    + '# in the override rules we will change PREFIX to /usr' + LF
-    + 'BINDIR = $(DESTDIR)$(PREFIX)/bin'+ LF
-    + LF
-    + '.PHONY : all'+ LF
-    + 'all:'+ LF
-    + TAB + 'lazbuild ?PROJECT?'+ LF
-    + LF
-    + '.PHONY : clean'+ LF
-    + 'clean:'+ LF
-    + TAB + '$(RM) -r lib'+ LF
-    + TAB + '$(RM) *.res'+ LF
-    + TAB + '$(RM) ?EXECUTABLE?'+ LF
-    + LF
-    + '.PHONY : install'+ LF
-    + 'install:'+ LF
-    + TAB + 'mkdir -p $(BINDIR)'+ LF
-    + TAB + 'install -s ?EXECUTABLE? $(BINDIR)/'+ LF
-    ;
-
 type
   { TPackagerBase all packagers will inherit from this base class.
     A packager will inherit and use these methods to load/save
@@ -79,8 +56,6 @@ type
     MaintainerEmail: String;
     PackageName: String;
     ExportCommands: String;
-    Makefile: String;
-    UseExistingMakefile: Boolean;
     constructor Create;
     destructor Destroy; override;
     procedure Save; virtual;
@@ -192,8 +167,6 @@ begin
   SaveValue(CONFNAME_BASE, 'maintainer_email', MaintainerEmail);
   SaveValue(CONFNAME_BASE, 'package_name', PackageName);
   SaveValue(CONFNAME_BASE, 'export_cmd', ExportCommands);
-  SaveValue(CONFNAME_BASE, 'use_existing_makefile', BoolToStr(UseExistingMakefile, True));
-  SaveValue(CONFNAME_BASE, 'tpl_makefile', Makefile);
 end;
 
 procedure TPackagerBase.Load;
@@ -205,9 +178,6 @@ begin
   MaintainerEmail := LoadValue(CONFNAME_BASE, 'maintainer_email', 'john_doe@example.invalid');
   PackageName := LoadValue(CONFNAME_BASE, 'package_name', 'debian-package-name');
   ExportCommands := LoadValue(CONFNAME_BASE, 'export_cmd', DEFAULT_EXPORT);
-  UseExistingMakefile := StrToBool(LoadValue(CONFNAME_BASE, 'use_existing_makefile', 'False'));
-
-  Makefile := LoadValue(CONFNAME_BASE, 'tpl_makefile', DEFAULT_MAKEFILE);
 end;
 
 function TPackagerBase.GetOriginalProjectVersion: String;
