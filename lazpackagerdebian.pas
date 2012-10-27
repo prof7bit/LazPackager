@@ -47,9 +47,11 @@ const
   DEFAULT_RULES
     = '#!/usr/bin/make -f' + LF
     + LF
-    + '# see http://www.debian.org/doc/manuals/maint-guide/dreq.en.html' + LF
-    + LF
     + 'ROOT = $(CURDIR)/debian/?PACKAGE_NAME?' + LF
+    + LF
+    + 'override_dh_auto_clean:' + LF
+    + TAB + '$(RM) -r lib' + LF
+    + TAB + '$(RM) lib *.res ?EXECUTABLE?' + LF
     + LF
     + 'override_dh_auto_build:' + LF
     + TAB + 'lazbuild ?PROJECT?' + LF
